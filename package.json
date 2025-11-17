@@ -1,0 +1,49 @@
+{
+  "name": "shadcn-mui-clone",
+  "version": "1.0.0",
+  "description": "A React component library built with MUI (Material-UI) - a Shadcn alternative",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext js,jsx,ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.19",
+    "@mui/material": "^5.14.20",
+    "@mui/system": "^5.14.20",
+    "@mui/docs": "^5.14.20",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.1",
+    "react-syntax-highlighter": "^15.5.0",
+    "prismjs": "^1.29.0",
+    "react-copy-to-clipboard": "^5.1.0",
+    "lucide-react": "^0.294.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@types/react-syntax-highlighter": "^15.5.11",
+    "@vitejs/plugin-react": "^4.1.1",
+    "eslint": "^8.53.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.4",
+    "vite": "^5.0.0"
+  },
+  "keywords": [
+    "react",
+    "mui",
+    "material-ui",
+    "components",
+    "library",
+    "shadcn-alternative"
+  ],
+  "author": "MiniMax Agent",
+  "license": "MIT"
+}
