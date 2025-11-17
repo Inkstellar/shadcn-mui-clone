@@ -12,7 +12,6 @@ import { ArrowRight, Code, Palette, Zap, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ButtonComp from '@/components/Button/Button';
 import CardComp from '@/components/Card/Card';
-import BadgeComp from '@/components/Badge/Badge';
 import { features, components } from '@/data/dataContents';
 
 
@@ -101,7 +100,6 @@ export default function HomePage() {
           <ButtonComp variant="contained">Primary</ButtonComp>
           <ButtonComp variant="outlined">Secondary</ButtonComp>
           <ButtonComp variant="tonal">Tonal</ButtonComp>
-          <BadgeComp>New</BadgeComp>
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>

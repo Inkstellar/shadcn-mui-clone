@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import {
   ThemeProvider,
@@ -15,13 +15,14 @@ import {
 } from '@mui/material';
 import { Menu, Sun, Moon, Github } from 'lucide-react';
 import { createCustomTheme, themeOptions } from './theme/theme';
-import ButtonDoc from './docs/ButtonDoc';
-import CardDoc from './docs/CardDoc';
-import InputDoc from './docs/InputDoc';
-import BadgeDoc from './docs/BadgeDoc';
-import ModalDoc from './docs/ModalDoc';
 import HomePage from './pages/HomePage';
 import DesignAssets from './pages/DesignAssets';
+
+
+const ButtonDoc = lazy(() => import('mui-cascade/docs/ButtonDoc'));
+const CardDoc = lazy(() => import('mui-cascade/docs/CardDoc'));
+const InputDoc = lazy(() => import('mui-cascade/docs/InputDoc'));
+const ModalDoc = lazy(() => import('mui-cascade/docs/ModalDoc'));
 
 const drawerWidth = 280;
 
@@ -30,7 +31,6 @@ const navigation = [
   { name: 'Button', href: '/components/button', icon: null },
   { name: 'Card', href: '/components/card', icon: null },
   { name: 'Input', href: '/components/input', icon: null },
-  { name: 'Badge', href: '/components/badge', icon: null },
   { name: 'Modal', href: '/components/modal', icon: null },
   { name: 'Design Assets', href: '/assets', icon: null },
 ];
@@ -66,16 +66,16 @@ function AppContent() {
             WebkitTextFillColor: 'transparent',
           }}
         >
-          Shadcn MUI
+          Cascade UI
         </Typography>
         <Typography
           variant="body2"
           sx={{ color: 'var(--muted-foreground)', marginTop: '4px' }}
         >
-          React components with Material-UI
+          FE fundinfo React UI Library
         </Typography>
       </Box>
-      
+
       <Box sx={{ px: 2, pb: 1 }}>
         <Typography
           variant="overline"
@@ -89,7 +89,7 @@ function AppContent() {
           Components
         </Typography>
       </Box>
-      
+
       <Box sx={{ px: 1 }}>
         {navigation.map((item) => {
           const isActive = location.pathname === item.href;
@@ -122,6 +122,8 @@ function AppContent() {
     </Box>
   );
 
+  
+
   return (
     <ThemeProvider theme={currentTheme}>
       <CssBaseline />
@@ -136,7 +138,7 @@ function AppContent() {
             color: 'var(--foreground)',
             border:'none',
             backdropFilter: 'blur(10px)',
-            
+
           }}
         >
           <Toolbar>
@@ -149,16 +151,16 @@ function AppContent() {
             >
               <Menu />
             </IconButton>
-            
+
             <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
               {navigation.find(nav => nav.href === location.pathname)?.name || 'Shadcn MUI'}
             </Typography>
-            
+
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <IconButton onClick={toggleDarkMode} color="inherit">
                 {darkMode ? <Sun /> : <Moon />}
               </IconButton>
-              
+
               <Button
                 component="a"
                 href="https://github.com"
@@ -178,7 +180,7 @@ function AppContent() {
             </Box>
           </Toolbar>
         </AppBar>
-        
+
         <Box
           component="nav"
           sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
@@ -203,7 +205,7 @@ function AppContent() {
           >
             {drawer}
           </Drawer>
-          
+
           <Drawer
             variant="permanent"
             sx={{
@@ -221,7 +223,7 @@ function AppContent() {
             {drawer}
           </Drawer>
         </Box>
-        
+
         <Box
           component="main"
           sx={{
@@ -233,16 +235,18 @@ function AppContent() {
           }}
         >
           <Toolbar />
-          
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/components/button" element={<ButtonDoc />} />
-            <Route path="/components/card" element={<CardDoc />} />
-            <Route path="/components/input" element={<InputDoc />} />
-            <Route path="/components/badge" element={<BadgeDoc />} />
-            <Route path="/components/modal" element={<ModalDoc />} />
-            <Route path="/assets" element={<DesignAssets />} />
-          </Routes>
+
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/components/button" element={<ButtonDoc />} />
+              <Route path="/components/card" element={<CardDoc />} />
+              <Route path="/components/input" element={<InputDoc />} />
+              {/* <Route path="/components/badge" element={<BadgeDoc />} /> */}
+              <Route path="/components/modal" element={<ModalDoc />} />
+              <Route path="/assets" element={<DesignAssets />} />
+            </Routes>
+          </Suspense>
         </Box>
       </Box>
     </ThemeProvider>
