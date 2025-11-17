@@ -13,17 +13,18 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@mui/docs": "^5.14.20",
     "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.14.20",
     "@mui/system": "^5.14.20",
-    "@mui/docs": "^5.14.20",
+    "lucide-react": "^0.294.0",
+    "mui-cascade": "^1.0.0",
+    "prismjs": "^1.29.0",
     "react": "^18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1",
-    "react-syntax-highlighter": "^15.5.0",
-    "prismjs": "^1.29.0",
-    "react-copy-to-clipboard": "^5.1.0",
-    "lucide-react": "^0.294.0"
+    "react-syntax-highlighter": "^15.5.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

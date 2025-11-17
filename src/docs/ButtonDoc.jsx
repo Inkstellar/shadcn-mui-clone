@@ -1,10 +1,9 @@
 import React from 'react';
 import ComponentDoc from './ComponentDoc';
-import Button from '@/components/Button/Button';
-import { Button as MuiButton } from '@mui/material';
+import { Button } from 'mui-cascade';
 import { ArrowRight, Download, Heart } from 'lucide-react';
 
-const basicButtonCode = `import { Button } from '@shadcn-mui/components';
+const basicButtonCode = `import { Button } from 'mui-cascade';
 
 function MyComponent() {
   return (
@@ -14,7 +13,7 @@ function MyComponent() {
   );
 }`;
 
-const variantsButtonCode = `import { Button } from '@shadcn-mui/components';
+const variantsButtonCode = `import { Button } from 'mui-cascade';
 
 function ButtonVariants() {
   return (
@@ -38,7 +37,7 @@ function ButtonVariants() {
   );
 }`;
 
-const sizesButtonCode = `import { Button } from '@shadcn-mui/components';
+const sizesButtonCode = `import { Button } from 'mui-cascade';
 
 function ButtonSizes() {
   return (
@@ -56,7 +55,7 @@ function ButtonSizes() {
   );
 }`;
 
-const iconsButtonCode = `import { Button } from '@shadcn-mui/components';
+const iconsButtonCode = `import { Button } from 'mui-cascade';
 import { ArrowRight, Download, Heart } from 'lucide-react';
 
 function ButtonWithIcons() {
@@ -75,7 +74,7 @@ function ButtonWithIcons() {
   );
 }`;
 
-const loadingButtonCode = `import { Button } from '@shadcn-mui/components';
+const loadingButtonCode = `import { Button } from 'mui-cascade';
 import { useState } from 'react';
 
 function LoadingButton() {

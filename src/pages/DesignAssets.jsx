@@ -166,7 +166,7 @@ export default function DesignAssets() {
       >
         {name} Colors
       </Typography>
-      <Grid container spacing={12}>
+      <Grid container spacing={1}>
         {Object.entries(palette).map(([key, value]) => (
           <Grid item xs={6} sm={4} md={3} lg={2} key={key}>
             <Card variant="outlined" sx={{ overflow: 'hidden' }}>
@@ -221,9 +221,9 @@ export default function DesignAssets() {
       </Typography>
       <Card variant="outlined">
         <CardContent>
-          <Grid container spacing={32}>
+          <Grid container spacing={2}>
             {Object.entries(typography).map(([key, style]) => (
-              <Grid item xs={12} md={6} key={key}>
+              <Grid item xs={12} md={12} key={key}>
                 <Box sx={{ marginBottom: '24px' }}>
                   <Typography
                     variant="body2"
@@ -279,7 +279,7 @@ export default function DesignAssets() {
       >
         Shadows
       </Typography>
-      <Grid container spacing={24}>
+      <Grid container spacing={2}>
         {Object.entries(shadows).map(([key, value]) => (
           <Grid item xs={6} md={4} lg={3} key={key}>
             <Card variant="outlined" sx={{ padding: '32px', textAlign: 'center' }}>
@@ -331,7 +331,7 @@ export default function DesignAssets() {
       >
         Border Radius
       </Typography>
-      <Grid container spacing={24}>
+      <Grid container spacing={2}>
         {Object.entries(borderRadius).map(([key, value]) => (
           <Grid item xs={6} md={4} lg={3} key={key}>
             <Card variant="outlined" sx={{ padding: '32px', textAlign: 'center' }}>

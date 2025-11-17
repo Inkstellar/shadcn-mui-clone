@@ -13,57 +13,8 @@ import { Link } from 'react-router-dom';
 import ButtonComp from '@/components/Button/Button';
 import CardComp from '@/components/Card/Card';
 import BadgeComp from '@/components/Badge/Badge';
+import { features, components } from '@/data/dataContents';
 
-const features = [
-  {
-    icon: <Code />,
-    title: 'Copy & Paste',
-    description: 'Copy component code directly into your project. No build steps or dependencies to install.',
-  },
-  {
-    icon: <Palette />,
-    title: 'Beautiful Design',
-    description: 'Carefully crafted components that look great and provide excellent user experience.',
-  },
-  {
-    icon: <Zap />,
-    title: 'Fast Performance',
-    description: 'Lightweight components built with Material-UI for optimal performance.',
-  },
-  {
-    icon: <Shield />,
-    title: 'Accessible',
-    description: 'All components follow accessibility best practices and ARIA guidelines.',
-  },
-];
-
-const components = [
-  {
-    name: 'Button',
-    description: 'Buttons are used to initialize an action',
-    href: '/components/button',
-  },
-  {
-    name: 'Card',
-    description: 'Cards are surfaces that display content',
-    href: '/components/card',
-  },
-  {
-    name: 'Input',
-    description: 'Input fields for user data entry',
-    href: '/components/input',
-  },
-  {
-    name: 'Badge',
-    description: 'Small status descriptors for UI elements',
-    href: '/components/badge',
-  },
-  {
-    name: 'Modal',
-    description: 'Dialogs that temporarily overlay content',
-    href: '/components/modal',
-  },
-];
 
 export default function HomePage() {
   return (
@@ -182,7 +133,7 @@ export default function HomePage() {
           Why choose Shadcn MUI?
         </Typography>
 
-        <Grid container spacing={32}>
+        <Grid container spacing={2}>
           {features.map((feature, index) => (
             <Grid item xs={12} md={6} key={index}>
               <CardComp variant="outlined" sx={{ height: '100%', padding: '32px' }}>
@@ -229,7 +180,7 @@ export default function HomePage() {
           Available Components
         </Typography>
 
-        <Grid container spacing={24}>
+        <Grid container spacing={2}>
           {components.map((component, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Link to={component.href} style={{ textDecoration: 'none' }}>

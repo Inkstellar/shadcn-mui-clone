@@ -1,8 +1,8 @@
 import React from 'react';
 import ComponentDoc from './ComponentDoc';
-import Badge from '@/components/Badge/Badge';
+import { Badge } from 'mui-cascade';
 
-const basicBadgeCode = `import { Badge } from '@shadcn-mui/components';
+const basicBadgeCode = `import { Badge } from 'mui-cascade';
 
 function MyBadge() {
   return (
@@ -10,7 +10,7 @@ function MyBadge() {
   );
 }`;
 
-const variantsBadgeCode = `import { Badge } from '@shadcn-mui/components';
+const variantsBadgeCode = `import { Badge } from 'mui-cascade';
 
 function BadgeVariants() {
   return (
@@ -22,7 +22,7 @@ function BadgeVariants() {
   );
 }`;
 
-const colorsBadgeCode = `import { Badge } from '@shadcn-mui/components';
+const colorsBadgeCode = `import { Badge } from 'mui-cascade';
 
 function BadgeColors() {
   return (
@@ -37,7 +37,7 @@ function BadgeColors() {
   );
 }`;
 
-const sizesBadgeCode = `import { Badge } from '@shadcn-mui/components';
+const sizesBadgeCode = `import { Badge } from 'mui-cascade';
 
 function BadgeSizes() {
   return (
@@ -48,7 +48,7 @@ function BadgeSizes() {
   );
 }`;
 
-const pulseBadgeCode = `import { Badge } from '@shadcn-mui/components';
+const pulseBadgeCode = `import { Badge } from 'mui-cascade';
 
 function PulseBadge() {
   return (
