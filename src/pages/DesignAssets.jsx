@@ -6,6 +6,7 @@ import {
   CardContent,
   Grid,
   Divider,
+  Container,
 } from '@mui/material';
 
 const colors = {
@@ -168,7 +169,7 @@ export default function DesignAssets() {
       </Typography>
       <Grid container spacing={1}>
         {Object.entries(palette).map(([key, value]) => (
-          <Grid item xs={6} sm={4} md={3} lg={2} key={key}>
+          <Grid item xs={6} sm={4} md={3} lg={3} key={key}>
             <Card variant="outlined" sx={{ overflow: 'hidden' }}>
               <Box
                 sx={{
@@ -431,7 +432,7 @@ export default function DesignAssets() {
   );
 
   return (
-    <Box sx={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <Container maxWidth="md">
       {/* Header */}
       <Box sx={{ textAlign: 'center', marginBottom: '80px' }}>
         <Typography
@@ -463,7 +464,11 @@ export default function DesignAssets() {
       </Box>
 
       {/* Color Palettes */}
-      {Object.entries(colors).map(([name, palette]) => renderColorPalette(name, palette))}
+      {Object.entries(colors).map(([name, palette]) => (
+        <React.Fragment key={name}>
+          {renderColorPalette(name, palette)}
+        </React.Fragment>
+      ))}
 
       {/* Typography */}
       {renderTypography()}
@@ -512,27 +517,27 @@ export default function DesignAssets() {
                 fontFamily: 'Monaco, Consolas, monospace',
               }}
             >
-{`:root {
-  --primary: #18181b;
-  --primary-foreground: #fafafa;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #18181b;
-  --muted: #f9fafb;
-  --muted-foreground: #6b7280;
-  --border: #e5e7eb;
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
-  --success: #22c55e;
-  --success-foreground: #fafafa;
-  --warning: #f59e0b;
-  --warning-foreground: #18181b;
-  --info: #3b82f6;
-  --info-foreground: #fafafa;
-}`}
+              {`:root {
+                --primary: #18181b;
+                --primary-foreground: #fafafa;
+                --secondary: #f4f4f5;
+                --secondary-foreground: #18181b;
+                --muted: #f9fafb;
+                --muted-foreground: #6b7280;
+                --border: #e5e7eb;
+                --destructive: #ef4444;
+                --destructive-foreground: #fafafa;
+                --success: #22c55e;
+                --success-foreground: #fafafa;
+                --warning: #f59e0b;
+                --warning-foreground: #18181b;
+                --info: #3b82f6;
+                --info-foreground: #fafafa;
+              }`}
             </Box>
           </CardContent>
         </Card>
       </Box>
-    </Box>
+    </Container>
   );
 }

@@ -2,8 +2,7 @@ import React from 'react';
 import {
   Box,
   Typography,
-  Button,
-  Card,
+  Container,
   CardContent,
   Grid,
   Chip,
@@ -17,7 +16,7 @@ import { features, components } from '@/data/dataContents';
 
 export default function HomePage() {
   return (
-    <Box sx={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <Container maxWidth="md">
       {/* Hero Section */}
       <Box sx={{ textAlign: 'center', padding: '80px 20px', paddingBottom: '120px' }}>
         <Box
@@ -76,7 +75,7 @@ export default function HomePage() {
           <ButtonComp size="large" rightIcon={<ArrowRight />}>
             Get Started
           </ButtonComp>
-          <ButtonComp size="large" variant="outlined">
+          <ButtonComp size="large" variant="outlined" component={Link} to="/components">
             View Components
           </ButtonComp>
         </Box>
@@ -266,7 +265,7 @@ export default function HomePage() {
           Copy, paste, and customize to your needs.
         </Typography>
         <Box sx={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <ButtonComp size="large" rightIcon={<ArrowRight />}>
+          <ButtonComp size="large" rightIcon={<ArrowRight />} component={Link} to="/components">
             Browse Components
           </ButtonComp>
           <ButtonComp size="large" variant="outlined">
@@ -274,6 +273,6 @@ export default function HomePage() {
           </ButtonComp>
         </Box>
       </Box>
-    </Box>
+    </Container>
   );
 }

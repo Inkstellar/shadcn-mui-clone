@@ -1,5 +1,5 @@
-import React, { useState, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import React, { useState, Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import {
   ThemeProvider,
   CssBaseline,
@@ -14,30 +14,21 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { Menu, Sun, Moon, Github } from 'lucide-react';
-import { createCustomTheme, themeOptions } from './theme/theme';
+import { createCustomTheme } from './theme/theme';
 import HomePage from './pages/HomePage';
 import DesignAssets from './pages/DesignAssets';
-
-
-const ButtonDoc = lazy(() => import('mui-cascade/docs/ButtonDoc'));
-const CardDoc = lazy(() => import('mui-cascade/docs/CardDoc'));
-const InputDoc = lazy(() => import('mui-cascade/docs/InputDoc'));
-const ModalDoc = lazy(() => import('mui-cascade/docs/ModalDoc'));
+import Components from './pages/Components';
+import { componentsList } from 'mui-cascade';
+import componentMenu from './components/layouts/componentMenu';
+import { CardDoc, InputDoc, ModalDoc, ButtonDoc } from './componentDocs';
+import { navigation } from './navigation';
 
 const drawerWidth = 280;
-
-const navigation = [
-  { name: 'Getting Started', href: '/', icon: null },
-  { name: 'Button', href: '/components/button', icon: null },
-  { name: 'Card', href: '/components/card', icon: null },
-  { name: 'Input', href: '/components/input', icon: null },
-  { name: 'Modal', href: '/components/modal', icon: null },
-  { name: 'Design Assets', href: '/assets', icon: null },
-];
 
 function AppContent() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({});
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
@@ -50,6 +41,13 @@ function AppContent() {
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
+  };
+
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
   };
 
   const drawer = (
@@ -76,49 +74,7 @@ function AppContent() {
         </Typography>
       </Box>
 
-      <Box sx={{ px: 2, pb: 1 }}>
-        <Typography
-          variant="overline"
-          sx={{
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            color: 'var(--muted-foreground)',
-            letterSpacing: '0.05em',
-          }}
-        >
-          Components
-        </Typography>
-      </Box>
-
-      <Box sx={{ px: 1 }}>
-        {navigation.map((item) => {
-          const isActive = location.pathname === item.href;
-          return (
-            <Button
-              key={item.name}
-              component={Link}
-              to={item.href}
-              sx={{
-                width: '100%',
-                justifyContent: 'flex-start',
-                padding: '8px 16px',
-                margin: '2px 0',
-                borderRadius: 1,
-                color: isActive ? 'var(--primary)' : 'var(--muted-foreground)',
-                backgroundColor: isActive ? 'var(--secondary)' : 'transparent',
-                '&:hover': {
-                  backgroundColor: 'var(--secondary)',
-                  color: 'var(--primary)',
-                },
-                textTransform: 'none',
-                fontSize: '0.875rem',
-              }}
-            >
-              {item.name}
-            </Button>
-          );
-        })}
-      </Box>
+      {componentMenu(navigation,location, expandedSections, toggleSection)}
     </Box>
   );
 
@@ -126,7 +82,7 @@ function AppContent() {
 
   return (
     <ThemeProvider theme={currentTheme}>
-      <CssBaseline />
+      
       <Box sx={{ display: 'flex' }}>
         <AppBar
           position="fixed"
@@ -237,8 +193,10 @@ function AppContent() {
           <Toolbar />
 
           <Suspense fallback={<div>Loading...</div>}>
+          <CssBaseline />
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/components" element={<Components />} />
               <Route path="/components/button" element={<ButtonDoc />} />
               <Route path="/components/card" element={<CardDoc />} />
               <Route path="/components/input" element={<InputDoc />} />
@@ -252,6 +210,7 @@ function AppContent() {
     </ThemeProvider>
   );
 }
+
 
 function App() {
   return (

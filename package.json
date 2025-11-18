@@ -18,7 +18,7 @@
     "@mui/material": "^5.14.20",
     "@mui/system": "^5.14.20",
     "lucide-react": "^0.294.0",
-    "mui-cascade": "^1.0.5",
+    "mui-cascade": "^1.0.14",
     "prismjs": "^1.29.0",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
