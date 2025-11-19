@@ -1,7 +1,5 @@
-import { lazy } from 'react';
-
-export const CardDoc = lazy(() => import('mui-cascade/docs/CardDoc'));
-export const InputDoc = lazy(() => import('mui-cascade/docs/InputDoc'));
-export const ModalDoc = lazy(() => import('mui-cascade/docs/ModalDoc'));
-export const ButtonDoc = lazy(() => import('mui-cascade/docs/ButtonDoc'));
-
+import CardDoc from 'mui-cascade/CardDoc';
+import InputDoc from 'mui-cascade/InputDoc';
+import ModalDoc from 'mui-cascade/ModalDoc';
+import ButtonDoc from 'mui-cascade/ButtonDoc';
+export { CardDoc, InputDoc, ModalDoc, ButtonDoc };

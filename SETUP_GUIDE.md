@@ -57,6 +57,26 @@ function App() {
 }
 ```
 
+### Installing Components with CLI
+
+Alternatively, you can use the npx command to install components directly from the mui-cascade library:
+
+```bash
+# Install a specific component
+npx mui-cascade-add button
+
+# Install multiple components at once
+npx mui-cascade-add button card input
+
+# Skip prompts for automated setup
+npx mui-cascade-add button --yes
+
+# Include theme configuration
+npx mui-cascade-add button --theme
+```
+
+This command automatically creates component files in `src/components/[ComponentName]/` with proper imports and handles all necessary setup. The CLI method is recommended for new projects and when you want to keep components updated with the library.
+
 ### Required Dependencies
 
 Make sure you have these in your `package.json`:

@@ -2357,10 +2357,10 @@ ms@^2.1.3:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-mui-cascade@^1.0.14:
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/mui-cascade/-/mui-cascade-1.0.14.tgz#83049b5b35aceb5d1c90891cd5a0a34d833a5abb"
-  integrity sha512-B0K1bsalFQzGqnchbIGY1udc5sDjZxe+zS1nkv7pSg6/m7F+DG6iVOXlir/89oWqiFvgupQrt2rJ+DEsihzr3Q==
+mui-cascade@^1.0.24:
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/mui-cascade/-/mui-cascade-1.0.24.tgz#1d953c9a8b16e7aececedb67348e6aeda4ef2ce0"
+  integrity sha512-4g1PjDyoGEmJdd2bzofELBMXo71+Ukl22QHXL4xdtdAkYRsnCz9fgaWS4tlydbLa7ql5DpDfTGv5yhv0OCvM6g==
   dependencies:
     "@mui/icons-material" "^5.14.19"
     "@mui/material" "^5.14.20"

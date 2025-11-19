@@ -200,7 +200,6 @@ function AppContent() {
               <Route path="/components/button" element={<ButtonDoc />} />
               <Route path="/components/card" element={<CardDoc />} />
               <Route path="/components/input" element={<InputDoc />} />
-              {/* <Route path="/components/badge" element={<BadgeDoc />} /> */}
               <Route path="/components/modal" element={<ModalDoc />} />
               <Route path="/assets" element={<DesignAssets />} />
             </Routes>

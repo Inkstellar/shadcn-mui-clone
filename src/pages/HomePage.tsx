@@ -9,10 +9,9 @@ import {
 } from '@mui/material';
 import { ArrowRight, Code, Palette, Zap, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import ButtonComp from '@/components/Button/Button';
-import CardComp from '@/components/Card/Card';
-import { features, components } from '@/data/dataContents';
-
+import CardComp from '../components/Card/Card';
+import Button from 'mui-cascade'
+import { features, components } from '../data/dataContents';
 
 export default function HomePage() {
   return (
@@ -72,12 +71,12 @@ export default function HomePage() {
         </Typography>
 
         <Box sx={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <ButtonComp size="large" rightIcon={<ArrowRight />}>
+          <Button size="large" rightIcon={<ArrowRight />}>
             Get Started
-          </ButtonComp>
-          <ButtonComp size="large" variant="outlined" component={Link} to="/components">
+          </Button>
+          <Button size="large" variant="outlined" component={Link} to="/components">
             View Components
-          </ButtonComp>
+          </Button>
         </Box>
       </Box>
 
@@ -96,9 +95,9 @@ export default function HomePage() {
         </Typography>
 
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: '32px', flexWrap: 'wrap', marginBottom: '48px' }}>
-          <ButtonComp variant="contained">Primary</ButtonComp>
-          <ButtonComp variant="outlined">Secondary</ButtonComp>
-          <ButtonComp variant="tonal">Tonal</ButtonComp>
+          <Button variant="contained">Primary</Button>
+          <Button variant="outlined">Secondary</Button>
+          <Button variant="tonal">Tonal</Button>
         </Box>
 
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -131,7 +130,7 @@ export default function HomePage() {
         </Typography>
 
         <Grid container spacing={2}>
-          {features.map((feature, index) => (
+          {features.map((feature: any, index: any) => (
             <Grid item xs={12} md={6} key={index}>
               <CardComp variant="outlined" sx={{ height: '100%', padding: '32px' }}>
                 <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
@@ -181,8 +180,8 @@ export default function HomePage() {
           {components.map((component, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Link to={component.href} style={{ textDecoration: 'none' }}>
-                <CardComp 
-                  variant="outlined" 
+                <CardComp
+                  variant="outlined"
                   interactive
                   sx={{ height: '100%', padding: '24px' }}
                 >
@@ -265,12 +264,12 @@ export default function HomePage() {
           Copy, paste, and customize to your needs.
         </Typography>
         <Box sx={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <ButtonComp size="large" rightIcon={<ArrowRight />} component={Link} to="/components">
+          <Button size="large" rightIcon={<ArrowRight />} component={Link} to="/components">
             Browse Components
-          </ButtonComp>
-          <ButtonComp size="large" variant="outlined">
+          </Button>
+          <Button size="large" variant="outlined">
             View on GitHub
-          </ButtonComp>
+          </Button>
         </Box>
       </Box>
     </Container>
