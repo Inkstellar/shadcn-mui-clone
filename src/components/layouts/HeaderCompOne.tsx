@@ -1,6 +1,11 @@
 import { Box, Typography } from '@mui/material';
 
-const HeaderCompOne = ({ title, description }) => {
+interface HeaderCompOneProps {
+  title: string;
+  description: string;
+}
+
+const HeaderCompOne = ({ title, description }: HeaderCompOneProps) => {
   return (
     <Box sx={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
       <Typography

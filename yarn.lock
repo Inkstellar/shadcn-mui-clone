@@ -2335,6 +2335,11 @@ lucide-react@^0.294.0:
   resolved "https://registry.npmjs.org/lucide-react/-/lucide-react-0.294.0.tgz"
   integrity sha512-V7o0/VECSGbLHn3/1O67FUgBwWB+hmzshrgDVRJQhMh8uj5D3HBuIvhuAmQTtlupILSplwIZg5FTc4tTKMA2SA==
 
+lucide-react@^0.554.0:
+  version "0.554.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.554.0.tgz#85ee9855d43cfa83f6077125fe9dbe2521bdf37d"
+  integrity sha512-St+z29uthEJVx0Is7ellNkgTEhaeSoA42I7JjOCBCrc5X6LYMGSv0P/2uS5HDLTExP5tpiqRD2PyUEOS6s9UXA==
+
 math-intrinsics@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.1.0.tgz"
@@ -2357,10 +2362,10 @@ ms@^2.1.3:
   resolved "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-mui-cascade@^1.0.24:
-  version "1.0.24"
-  resolved "https://registry.yarnpkg.com/mui-cascade/-/mui-cascade-1.0.24.tgz#1d953c9a8b16e7aececedb67348e6aeda4ef2ce0"
-  integrity sha512-4g1PjDyoGEmJdd2bzofELBMXo71+Ukl22QHXL4xdtdAkYRsnCz9fgaWS4tlydbLa7ql5DpDfTGv5yhv0OCvM6g==
+mui-cascade@^1.0.25:
+  version "1.0.25"
+  resolved "https://registry.yarnpkg.com/mui-cascade/-/mui-cascade-1.0.25.tgz#08ae932e988577a34b33c3389adf14607923b0a6"
+  integrity sha512-nbermkKxOpzphgzJrp2PBLwtWAMWwK4iFr1nSdhGv8zJ740jWN+qzrX7RCCppcG695dH3XekzREpE6nh3MnnvQ==
   dependencies:
     "@mui/icons-material" "^5.14.19"
     "@mui/material" "^5.14.20"
@@ -2369,6 +2374,7 @@ mui-cascade@^1.0.24:
     commander "^11.1.0"
     fs-extra "^11.3.2"
     inquirer "^8.2.6"
+    lucide-react "^0.554.0"
     tslib "^2.8.1"
 
 mute-stream@0.0.8:
@@ -3189,6 +3195,11 @@ typed-array-length@^1.0.7:
     is-typed-array "^1.1.13"
     possible-typed-array-names "^1.0.0"
     reflect.getprototypeof "^1.0.6"
+
+typescript@^5.9.3:
+  version "5.9.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.9.3.tgz#5b4f59e15310ab17a216f5d6cf53ee476ede670f"
+  integrity sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==
 
 unbox-primitive@^1.1.0:
   version "1.1.0"

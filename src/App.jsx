@@ -14,14 +14,14 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { Menu, Sun, Moon, Github } from 'lucide-react';
-import { createCustomTheme } from './theme/theme';
+import { createCustomTheme } from 'mui-cascade';
 import HomePage from './pages/HomePage';
 import DesignAssets from './pages/DesignAssets';
 import Components from './pages/Components';
-import { componentsList } from 'mui-cascade';
 import componentMenu from './components/layouts/componentMenu';
-import { CardDoc, InputDoc, ModalDoc, ButtonDoc } from './componentDocs';
+import { CardDoc, InputDoc, ModalDoc, ButtonDoc } from 'mui-cascade';
 import { navigation } from './navigation';
+import './app.css';
 
 const drawerWidth = 280;
 
@@ -41,6 +41,7 @@ function AppContent() {
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
+    console.log(currentTheme);
   };
 
   const toggleSection = (section) => {
@@ -74,15 +75,15 @@ function AppContent() {
         </Typography>
       </Box>
 
-      {componentMenu(navigation,location, expandedSections, toggleSection)}
+      {componentMenu(navigation, location, expandedSections, toggleSection)}
     </Box>
   );
 
-  
+
 
   return (
     <ThemeProvider theme={currentTheme}>
-      
+      <CssBaseline />
       <Box sx={{ display: 'flex' }}>
         <AppBar
           position="fixed"
@@ -92,7 +93,7 @@ function AppContent() {
             ml: { md: `${drawerWidth}px` },
             backgroundColor: 'var(--background)',
             color: 'var(--foreground)',
-            border:'none',
+            border: 'none',
             backdropFilter: 'blur(10px)',
 
           }}
@@ -193,7 +194,6 @@ function AppContent() {
           <Toolbar />
 
           <Suspense fallback={<div>Loading...</div>}>
-          <CssBaseline />
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/components" element={<Components />} />

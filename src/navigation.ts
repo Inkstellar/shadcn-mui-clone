@@ -1,4 +1,4 @@
-import { componentsList } from 'mui-cascade/navigation';
+import { componentsList } from 'mui-cascade';
 
 export const navigation = [
     { name: 'Getting Started', href: '/', icon: null },

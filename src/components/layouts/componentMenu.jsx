@@ -11,31 +11,34 @@ export default function componentMenu(navigation, location, expandedSections, to
     item.href.startsWith('/components/')
   );
 
+  function MenuListItem({name, href, children, isActive}){
+    return <MenuItem
+    key={name}
+    component={Link}
+    to={href}
+    sx={{
+      my: 0.5,
+      borderRadius: 1,
+      color: isActive ? 'var(--primary)' : 'var(--muted-foreground)',
+      backgroundColor: isActive ? 'var(--secondary)' : 'transparent',
+      '&:hover': {
+        backgroundColor: 'var(--secondary)',
+        color: 'var(--primary)',
+      },
+      textTransform: 'none',
+    }}
+  >{children}</MenuItem>
+  }
+
   return (
     <MenuList sx={{ px: 1 }} >
       {/* Static items */}
       {staticItems.map((item) => {
         const isActive = location.pathname === item.href;
         return (
-          <MenuItem
-            key={item.name}
-            component={Link}
-            to={item.href}
-            sx={{
-              my: 0.5,
-              borderRadius: 1,
-              color: isActive ? 'var(--primary)' : 'var(--muted-foreground)',
-              backgroundColor: isActive ? 'var(--secondary)' : 'transparent',
-              '&:hover': {
-                backgroundColor: 'var(--secondary)',
-                color: 'var(--primary)',
-              },
-              textTransform: 'none',
-
-            }}
-          >
-            <ListItemText primary={item.name} />
-          </MenuItem>
+          <MenuListItem key={item.name} href={item.href} isActive={isActive}>
+            <ListItemText secondary={item.name}/>
+          </MenuListItem>
         );
       })}
 
@@ -62,7 +65,7 @@ export default function componentMenu(navigation, location, expandedSections, to
             onClick={() => toggleSection('components')}
           >
             <ListItemText
-              primary="Components"
+              secondary="Components"
                />
             {expandedSections['components'] ? (
               <ChevronDown size={16} />
@@ -70,30 +73,13 @@ export default function componentMenu(navigation, location, expandedSections, to
               <ChevronRight size={16} />
             )}
           </MenuItem>
-          <Collapse in={expandedSections['components']} timeout="auto" unmountOnExit>
+          <Collapse in={expandedSections['components']} timeout="auto" unmountOnExit sx={{ pl: 3 }}>
             {componentItems.map((item) => {
               const isActive = location.pathname === item.href;
               return (
-                <MenuItem
-                  key={item.name}
-                  component={Link}
-                  to={item.href}
-                  sx={{
-                    borderRadius: 1,
-                    color: isActive ? 'var(--primary)' : 'var(--muted-foreground)',
-                    backgroundColor: isActive ? 'var(--secondary)' : 'transparent',
-                    my: 0.5,
-                    '&:hover': {
-                      backgroundColor: 'var(--secondary)',
-                      color: 'var(--primary)',
-                    },
-                    textTransform: 'none',
-                    fontSize: '0.875rem',
-                    pl: 4,
-                  }}
-                >
-                  <ListItemText primary={item.name} />
-                </MenuItem>
+                <MenuListItem key={item.name} href={item.href} isActive={isActive}>
+                  <ListItemText secondary={item.name} />
+                </MenuListItem>
               );
             })}
           </Collapse>

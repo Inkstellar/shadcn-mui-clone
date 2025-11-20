@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { ArrowRight, Code, Palette, Zap, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import CardComp from '../components/Card/Card';
+import CardComp from '../components/ui/Card/Card';
 import Button from 'mui-cascade'
 import { features, components } from '../data/dataContents';
 
