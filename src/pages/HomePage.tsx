@@ -126,7 +126,7 @@ export default function HomePage() {
             marginBottom: '48px',
           }}
         >
-          Why choose Shadcn MUI?
+          Why choose Cascade UI?
         </Typography>
 
         <Grid container spacing={2}>

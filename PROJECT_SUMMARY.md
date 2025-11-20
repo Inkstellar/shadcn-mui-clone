@@ -1,4 +1,4 @@
-# Shadcn MUI Clone - Project Summary
+# Cascade UI Clone - Project Summary
 
 ## 🎉 Project Created Successfully!
 
@@ -235,4 +235,4 @@ All components follow Material-UI patterns while providing unique styling and fu
 
 **Built with ❤️ by MiniMax Agent**
 
-This Shadcn MUI clone successfully combines the best of Material-UI's robust component system with an enhanced documentation experience and comprehensive design system.
+This Cascade UI clone successfully combines the best of Material-UI's robust component system with an enhanced documentation experience and comprehensive design system.

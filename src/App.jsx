@@ -19,7 +19,7 @@ import HomePage from './pages/HomePage';
 import DesignAssets from './pages/DesignAssets';
 import Components from './pages/Components';
 import componentMenu from './components/layouts/componentMenu';
-import { CardDoc, InputDoc, ModalDoc, ButtonDoc } from 'mui-cascade';
+import { componentDocsRegistry } from 'mui-cascade';
 import { navigation } from './navigation';
 import './app.css';
 
@@ -110,7 +110,7 @@ function AppContent() {
             </IconButton>
 
             <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-              {navigation.find(nav => nav.href === location.pathname)?.name || 'Shadcn MUI'}
+              {navigation.find(nav => nav.href === location.pathname)?.name || 'Cascade UI'}
             </Typography>
 
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -197,10 +197,10 @@ function AppContent() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/components" element={<Components />} />
-              <Route path="/components/button" element={<ButtonDoc />} />
-              <Route path="/components/card" element={<CardDoc />} />
-              <Route path="/components/input" element={<InputDoc />} />
-              <Route path="/components/modal" element={<ModalDoc />} />
+              {/* Dynamic component doc routes */}
+              {Object.entries(componentDocsRegistry).map(([key, { component: Component, path }]) => (
+                <Route key={key} path={path} element={<Component />} />
+              ))}
               <Route path="/assets" element={<DesignAssets />} />
             </Routes>
           </Suspense>

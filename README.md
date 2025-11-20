@@ -1,8 +1,8 @@
-# Shadcn MUI
+# Cascade UI
 
 A beautiful and accessible React component library built with Material-UI (MUI). Copy, paste, and customize to your needs.
 
-![Shadcn MUI](./docs/preview.png)
+![Cascade UI](./docs/preview.png)
 
 ## Features
 
