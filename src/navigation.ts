@@ -1,10 +1,13 @@
 import { componentDocsRegistry } from 'mui-cascade';
 
 // Transform componentDocsRegistry to navigation format
-const componentNavItems = Object.values(componentDocsRegistry).map(({ name, path }) => ({
+const componentNavItems = Object.values(componentDocsRegistry).map(({ name, path, newitem, experimental, deprecated }) => ({
   name,
   href: path,
   icon: null,
+  newitem,
+  experimental,
+  deprecated
 }));
 
 export const navigation = [

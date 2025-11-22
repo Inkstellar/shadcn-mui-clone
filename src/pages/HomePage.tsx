@@ -10,7 +10,7 @@ import {
 import { ArrowRight, Code, Palette, Zap, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CardComp from '../components/ui/Card/Card';
-import Button from 'mui-cascade'
+import { Button, themeOptions } from 'mui-cascade';
 import { features, components } from '../data/dataContents';
 
 export default function HomePage() {
@@ -40,16 +40,6 @@ export default function HomePage() {
 
         <Typography
           variant="h1"
-          sx={{
-            fontSize: { xs: '3rem', md: '4rem' },
-            fontWeight: 700,
-            background: 'linear-gradient(135deg, #18181b 0%, #52525b 100%)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            marginBottom: '24px',
-            lineHeight: 1.1,
-          }}
         >
           Beautiful components
           <br />
@@ -57,7 +47,7 @@ export default function HomePage() {
         </Typography>
 
         <Typography
-          variant="body1"
+          variant="body2"
           sx={{
             fontSize: '1.25rem',
             color: '#52525b',

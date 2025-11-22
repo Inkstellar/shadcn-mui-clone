@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -7,166 +7,86 @@ import {
   Grid,
   Divider,
   Container,
+  useTheme,
+  TextField,
+  IconButton,
+  Snackbar,
 } from '@mui/material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-const colors = {
-  primary: {
-    50: '#fafafa',
-    100: '#f4f4f5',
-    200: '#e4e4e7',
-    300: '#d4d4d8',
-    400: '#a1a1aa',
-    500: '#71717a',
-    600: '#52525b',
-    700: '#3f3f46',
-    800: '#27272a',
-    900: '#18181b',
-  },
-  secondary: {
-    50: '#fafafa',
-    100: '#f4f4f5',
-    200: '#e4e4e7',
-    300: '#d4d4d8',
-    400: '#a1a1aa',
-    500: '#71717a',
-    600: '#52525b',
-    700: '#3f3f46',
-    800: '#27272a',
-    900: '#18181b',
-  },
-  destructive: {
-    50: '#fef2f2',
-    100: '#fee2e2',
-    200: '#fecaca',
-    300: '#fca5a5',
-    400: '#f87171',
-    500: '#ef4444',
-    600: '#dc2626',
-    700: '#b91c1c',
-    800: '#991b1b',
-    900: '#7f1d1d',
-  },
-  success: {
-    50: '#f0fdf4',
-    100: '#dcfce7',
-    200: '#bbf7d0',
-    300: '#86efac',
-    400: '#4ade80',
-    500: '#22c55e',
-    600: '#16a34a',
-    700: '#15803d',
-    800: '#166534',
-    900: '#14532d',
-  },
-  warning: {
-    50: '#fffbeb',
-    100: '#fef3c7',
-    200: '#fde68a',
-    300: '#fcd34d',
-    400: '#fbbf24',
-    500: '#f59e0b',
-    600: '#d97706',
-    700: '#b45309',
-    800: '#92400e',
-    900: '#78350f',
-  },
-  info: {
-    50: '#eff6ff',
-    100: '#dbeafe',
-    200: '#bfdbfe',
-    300: '#93c5fd',
-    400: '#60a5fa',
-    500: '#3b82f6',
-    600: '#2563eb',
-    700: '#1d4ed8',
-    800: '#1e40af',
-    900: '#1e3a8a',
-  },
-};
-
-const typography = {
-  h1: {
-    fontSize: '3.5rem',
-    fontWeight: 700,
-    lineHeight: 1.2,
-    letterSpacing: '-0.02em',
-  },
-  h2: {
-    fontSize: '2.5rem',
-    fontWeight: 700,
-    lineHeight: 1.2,
-    letterSpacing: '-0.02em',
-  },
-  h3: {
-    fontSize: '2rem',
-    fontWeight: 600,
-    lineHeight: 1.3,
-  },
-  h4: {
-    fontSize: '1.5rem',
-    fontWeight: 600,
-    lineHeight: 1.4,
-  },
-  h5: {
-    fontSize: '1.25rem',
-    fontWeight: 600,
-    lineHeight: 1.4,
-  },
-  h6: {
-    fontSize: '1.125rem',
-    fontWeight: 600,
-    lineHeight: 1.4,
-  },
-  body1: {
-    fontSize: '1rem',
-    lineHeight: 1.6,
-  },
-  body2: {
-    fontSize: '0.875rem',
-    lineHeight: 1.6,
-  },
-  button: {
-    fontSize: '0.875rem',
-    fontWeight: 500,
-    textTransform: 'none',
-  },
-};
-
-const shadows = {
-  sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-  DEFAULT: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-  md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-  lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1)',
-  xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-  '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
-};
-
-const borderRadius = {
-  none: '0',
-  sm: '0.125rem',
-  DEFAULT: '0.25rem',
-  md: '0.375rem',
-  lg: '0.5rem',
-  xl: '0.75rem',
-  '2xl': '1rem',
-  '3xl': '1.5rem',
-  full: '9999px',
-};
-
+// Get colors and typography from the theme dynamically
 export default function DesignAssets() {
+  const theme = useTheme();
+  const [sampleText, setSampleText] = useState('The quick brown fox jumps over the lazy dog');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [copiedValue, setCopiedValue] = useState('');
+
+  // Extract colors from theme palette
+  const colors = {
+    primary: {
+      main: theme.palette.primary.main,
+      light: theme.palette.primary.light,
+      dark: theme.palette.primary.dark,
+    },
+    secondary: {
+      main: theme.palette.secondary.main,
+      light: theme.palette.secondary.light,
+      dark: theme.palette.secondary.dark,
+    },
+    grey: theme.palette.grey,
+    text: {
+      primary: theme.palette.text.primary,
+      secondary: theme.palette.text.secondary,
+    },
+    background: {
+      default: theme.palette.background.default,
+      paper: theme.palette.background.paper,
+    },
+  };
+
+  // Extract typography from theme
+  const typography = {
+    h1: theme.typography.h1,
+    h2: theme.typography.h2,
+    h3: theme.typography.h3,
+    h4: theme.typography.h4,
+    h5: theme.typography.h5,
+    h6: theme.typography.h6,
+    body1: theme.typography.body1,
+    body2: theme.typography.body2,
+    button: theme.typography.button,
+  };
+
+  const shadows = {
+    sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+    DEFAULT: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+    md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+    lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1)',
+    xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+    '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+  };
+
+  const borderRadius = {
+    none: '0',
+    sm: '0.125rem',
+    DEFAULT: '0.25rem',
+    md: '0.375rem',
+    lg: '0.5rem',
+    xl: '0.75rem',
+    '2xl': '1rem',
+    '3xl': '1.5rem',
+    full: '9999px',
+  };
+
+  const handleCopyColor = (value) => {
+    navigator.clipboard.writeText(value);
+    setCopiedValue(value);
+    setSnackbarOpen(true);
+  };
+
   const renderColorPalette = (name, palette) => (
     <Box sx={{ marginBottom: '48px' }}>
-      <Typography
-        variant="h3"
-        sx={{
-          fontSize: '1.5rem',
-          fontWeight: 600,
-          marginBottom: '24px',
-          textTransform: 'capitalize',
-        }}
-      >
-        {name} Colors
-      </Typography>
+      <Typography variant="h4" sx={{ marginBottom: '24px' }} color={`${name}`}>{name} Colors</Typography>
       <Grid container spacing={1}>
         {Object.entries(palette).map(([key, value]) => (
           <Grid item xs={6} sm={4} md={3} lg={3} key={key}>
@@ -180,26 +100,27 @@ export default function DesignAssets() {
                 }}
               />
               <CardContent sx={{ padding: '12px' }}>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontSize: '0.875rem',
-                    fontWeight: 500,
-                    marginBottom: '4px',
-                  }}
-                >
-                  {key}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontSize: '0.75rem',
-                    color: 'var(--muted-foreground)',
-                    fontFamily: 'Monaco, Consolas, monospace',
-                  }}
-                >
-                  {value}
-                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Box sx={{ flex: 1 }}>
+                    <Typography variant="body2">
+                      {key}
+                    </Typography>
+                    <Typography variant="caption">
+                      {value}
+                    </Typography>
+                  </Box>
+                  <IconButton
+                    size="small"
+                    onClick={() => handleCopyColor(value)}
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: theme.palette.action.hover,
+                      },
+                    }}
+                  >
+                    <ContentCopyIcon fontSize="small" />
+                  </IconButton>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
@@ -210,16 +131,16 @@ export default function DesignAssets() {
 
   const renderTypography = () => (
     <Box sx={{ marginBottom: '48px' }}>
-      <Typography
-        variant="h3"
-        sx={{
-          fontSize: '1.5rem',
-          fontWeight: 600,
-          marginBottom: '24px',
-        }}
-      >
-        Typography
-      </Typography>
+      <Typography variant="h3" sx={{ marginBottom: '24px' }}>Typography</Typography>
+      <TextField
+        fullWidth
+        label="Sample Text"
+        value={sampleText}
+        onChange={(e) => setSampleText(e.target.value)}
+        variant="outlined"
+        sx={{ marginBottom: '16px' }}
+        placeholder="Enter custom text to preview"
+      />
       <Card variant="outlined">
         <CardContent>
           <Grid container spacing={2}>
@@ -244,17 +165,10 @@ export default function DesignAssets() {
                       variant={key.startsWith('h') ? key : 'body1'}
                       sx={style}
                     >
-                      The quick brown fox
+                      {sampleText}
                     </Typography>
                   </Box>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontSize: '0.75rem',
-                      color: 'var(--muted-foreground)',
-                      fontFamily: 'Monaco, Consolas, monospace',
-                    }}
-                  >
+                  <Typography variant="body2" color={theme.palette.grey[400]}>
                     {Object.entries(style)
                       .map(([prop, value]) => `${prop}: ${value}`)
                       .join(', ')}
@@ -293,24 +207,10 @@ export default function DesignAssets() {
                   boxShadow: value,
                 }}
               />
-              <Typography
-                variant="body2"
-                sx={{
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  marginBottom: '8px',
-                }}
-              >
+              <Typography variant="body2">
                 {key}
               </Typography>
-              <Typography
-                variant="caption"
-                sx={{
-                  fontSize: '0.75rem',
-                  color: 'var(--muted-foreground)',
-                  fontFamily: 'Monaco, Consolas, monospace',
-                }}
-              >
+              <Typography variant="caption">
                 {value}
               </Typography>
             </Card>
@@ -322,16 +222,7 @@ export default function DesignAssets() {
 
   const renderBorderRadius = () => (
     <Box sx={{ marginBottom: '48px' }}>
-      <Typography
-        variant="h3"
-        sx={{
-          fontSize: '1.5rem',
-          fontWeight: 600,
-          marginBottom: '24px',
-        }}
-      >
-        Border Radius
-      </Typography>
+      <Typography variant="h3">Border Radius</Typography>
       <Grid container spacing={2}>
         {Object.entries(borderRadius).map(([key, value]) => (
           <Grid item xs={6} md={4} lg={3} key={key}>
@@ -373,14 +264,7 @@ export default function DesignAssets() {
 
   const renderSpacing = () => (
     <Box sx={{ marginBottom: '48px' }}>
-      <Typography
-        variant="h3"
-        sx={{
-          fontSize: '1.5rem',
-          fontWeight: 600,
-          marginBottom: '24px',
-        }}
-      >
+      <Typography variant="h3">
         Spacing
       </Typography>
       <Card variant="outlined">
@@ -432,32 +316,16 @@ export default function DesignAssets() {
   );
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg">
       {/* Header */}
-      <Box sx={{ textAlign: 'center', marginBottom: '80px' }}>
-        <Typography
-          variant="h1"
-          sx={{
-            fontSize: '3rem',
-            fontWeight: 700,
-            marginBottom: '16px',
-            background: 'linear-gradient(135deg, #18181b 0%, #52525b 100%)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}
-        >
-          Design Assets
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            fontSize: '1.125rem',
-            color: '#52525b',
-            maxWidth: '600px',
-            margin: '0 auto',
-          }}
-        >
+      <Box sx={{ marginBottom: '80px' }}>
+        <Typography variant="h1" sx={{ mb: '24px' }}>Design Assets</Typography>
+        <Typography variant="body1" sx={{
+          fontSize: '1.25rem',
+          color: '#52525b',
+          marginBottom: '48px',
+          maxWidth: '600px',
+        }}>
           A comprehensive design system with colors, typography, shadows,
           and spacing. Everything you need to maintain consistency across your project.
         </Typography>
@@ -484,28 +352,10 @@ export default function DesignAssets() {
 
       {/* CSS Variables */}
       <Box sx={{ marginBottom: '48px' }}>
-        <Typography
-          variant="h3"
-          sx={{
-            fontSize: '1.5rem',
-            fontWeight: 600,
-            marginBottom: '24px',
-          }}
-        >
-          CSS Variables
-        </Typography>
+        <Typography variant="h3">CSS Variables</Typography>
         <Card variant="outlined">
           <CardContent>
-            <Typography
-              variant="body2"
-              sx={{
-                fontSize: '0.875rem',
-                color: 'var(--muted-foreground)',
-                marginBottom: '16px',
-              }}
-            >
-              These CSS variables can be used directly in your stylesheets:
-            </Typography>
+            <Typography variant="body2">These CSS variables can be used directly in your stylesheets:</Typography>
             <Box
               component="pre"
               sx={{
@@ -518,26 +368,40 @@ export default function DesignAssets() {
               }}
             >
               {`:root {
-                --primary: #18181b;
-                --primary-foreground: #fafafa;
-                --secondary: #f4f4f5;
-                --secondary-foreground: #18181b;
-                --muted: #f9fafb;
-                --muted-foreground: #6b7280;
-                --border: #e5e7eb;
-                --destructive: #ef4444;
-                --destructive-foreground: #fafafa;
-                --success: #22c55e;
-                --success-foreground: #fafafa;
-                --warning: #f59e0b;
-                --warning-foreground: #18181b;
-                --info: #3b82f6;
-                --info-foreground: #fafafa;
-              }`}
+  --primary: ${theme.palette.primary.main};
+  --primary-light: ${theme.palette.primary.light};
+  --primary-dark: ${theme.palette.primary.dark};
+  --secondary: ${theme.palette.secondary.main};
+  --secondary-light: ${theme.palette.secondary.light};
+  --secondary-dark: ${theme.palette.secondary.dark};
+  --background-default: ${theme.palette.background.default};
+  --background-paper: ${theme.palette.background.paper};
+  --text-primary: ${theme.palette.text.primary};
+  --text-secondary: ${theme.palette.text.secondary};
+  --grey-50: ${theme.palette.grey[50]};
+  --grey-100: ${theme.palette.grey[100]};
+  --grey-200: ${theme.palette.grey[200]};
+  --grey-300: ${theme.palette.grey[300]};
+  --grey-400: ${theme.palette.grey[400]};
+  --grey-500: ${theme.palette.grey[500]};
+  --grey-600: ${theme.palette.grey[600]};
+  --grey-700: ${theme.palette.grey[700]};
+  --grey-800: ${theme.palette.grey[800]};
+  --grey-900: ${theme.palette.grey[900]};
+}`}
             </Box>
           </CardContent>
         </Card>
       </Box>
+
+      {/* Toast notification */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={2000}
+        onClose={() => setSnackbarOpen(false)}
+        message={`Copied ${copiedValue}`}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      />
     </Container>
   );
 }

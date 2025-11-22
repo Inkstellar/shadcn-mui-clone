@@ -18,15 +18,17 @@ import { createCustomTheme } from 'mui-cascade';
 import HomePage from './pages/HomePage';
 import DesignAssets from './pages/DesignAssets';
 import Components from './pages/Components';
-import componentMenu from './components/layouts/componentMenu';
+import componentMenu from './components/layouts/componentMenu.tsx';
 import { componentDocsRegistry } from 'mui-cascade';
 import { navigation } from './navigation';
 import './app.css';
+import logoImage from '../assets/images/fefundinfo_logo_colour_rgb.svg';
 
 const drawerWidth = 280;
 
 function AppContent() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [expandedSections, setExpandedSections] = useState({});
   const theme = useTheme();
@@ -36,7 +38,11 @@ function AppContent() {
   const currentTheme = createCustomTheme(darkMode ? 'dark' : 'light');
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    if (isMobile) {
+      setMobileOpen(!mobileOpen);
+    } else {
+      setDrawerOpen(!drawerOpen);
+    }
   };
 
   const toggleDarkMode = () => {
@@ -54,19 +60,8 @@ function AppContent() {
   const drawer = (
     <Box sx={{ overflow: 'auto' }}>
       <Box sx={{ p: 2 }}>
-        <Typography
-          variant="h6"
-          sx={{
-            fontSize: '1.5rem',
-            fontWeight: 700,
-            background: 'linear-gradient(135deg, #18181b 0%, #52525b 100%)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}
-        >
-          Cascade UI
-        </Typography>
+        <img src={logoImage} alt="FE fundinfo Logo" style={{ maxWidth: '200px', marginBottom: '16px' }} />
+        <Typography variant="h6">Cascade UI</Typography>
         <Typography
           variant="body2"
           sx={{ color: 'var(--muted-foreground)', marginTop: '4px' }}
@@ -89,22 +84,22 @@ function AppContent() {
           position="fixed"
           elevation={0}
           sx={{
-            width: { md: `calc(100% - ${drawerWidth}px)` },
-            ml: { md: `${drawerWidth}px` },
+            width: { md: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%' },
+            ml: { md: drawerOpen ? `${drawerWidth}px` : 0 },
             backgroundColor: 'var(--background)',
             color: 'var(--foreground)',
             border: 'none',
             backdropFilter: 'blur(10px)',
-
+            transition: 'margin 225ms cubic-bezier(0, 0, 0.2, 1), width 225ms cubic-bezier(0, 0, 0.2, 1)',
           }}
         >
           <Toolbar>
             <IconButton
               color="inherit"
-              aria-label="open drawer"
+              aria-label="toggle drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { md: 'none' } }}
+              sx={{ mr: 2 }}
             >
               <Menu />
             </IconButton>
@@ -140,7 +135,7 @@ function AppContent() {
 
         <Box
           component="nav"
-          sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+          sx={{ width: { md: drawerOpen ? drawerWidth : 0 }, transition: 'width 225ms cubic-bezier(0, 0, 0.2, 1)', flexShrink: { md: 0 } }}
         >
           <Drawer
             variant="temporary"
@@ -154,9 +149,7 @@ function AppContent() {
               '& .MuiDrawer-paper': {
                 boxSizing: 'border-box',
                 width: drawerWidth,
-                backgroundColor: 'var(--background)',
-                borderRight: '1px solid',
-                borderColor: 'var(--border)',
+                borderRight: 'none',
               },
             }}
           >
@@ -164,7 +157,8 @@ function AppContent() {
           </Drawer>
 
           <Drawer
-            variant="permanent"
+            variant="persistent"
+            open={drawerOpen}
             sx={{
               display: { xs: 'none', md: 'block' },
               '& .MuiDrawer-paper': {
@@ -173,9 +167,9 @@ function AppContent() {
                 backgroundColor: 'var(--background)',
                 borderRight: '1px solid',
                 borderColor: 'var(--border)',
+                transition: 'transform 225ms cubic-bezier(0, 0, 0.2, 1)',
               },
             }}
-            open
           >
             {drawer}
           </Drawer>
@@ -186,9 +180,10 @@ function AppContent() {
           sx={{
             flexGrow: 1,
             p: 3,
-            width: { md: `calc(100% - ${drawerWidth}px)` },
+            width: { md: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%' },
             minHeight: '100vh',
             backgroundColor: 'var(--muted)',
+            transition: 'width 225ms cubic-bezier(0, 0, 0.2, 1)',
           }}
         >
           <Toolbar />

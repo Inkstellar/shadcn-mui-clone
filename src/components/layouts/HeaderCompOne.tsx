@@ -10,19 +10,10 @@ const HeaderCompOne = ({ title, description }: HeaderCompOneProps) => {
     <Box sx={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
       <Typography
         variant="h1"
-        sx={{
-          fontSize: '3rem',
-          fontWeight: 700,
-          marginBottom: '16px',
-          background: 'linear-gradient(135deg, #18181b 0%, #52525b 100%)',
-          backgroundClip: 'text',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-        }}
       >
         {title}
       </Typography>
-      
+
       <Typography
         variant="body1"
         sx={{
@@ -35,6 +26,7 @@ const HeaderCompOne = ({ title, description }: HeaderCompOneProps) => {
         {description}
       </Typography>
     </Box>
-  )}
+  )
+}
 
 export default HeaderCompOne;

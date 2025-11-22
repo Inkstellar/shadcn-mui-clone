@@ -59,7 +59,7 @@ function App() {
 Buttons are used to initialize an action.
 
 ```jsx
-import { Button } from '@shadcn-mui/components';
+import { Button } from 'mui-cascade';
 
 function MyComponent() {
   return (
@@ -84,7 +84,7 @@ function MyComponent() {
 Cards are surfaces that display content and actions.
 
 ```jsx
-import { Card, CardHeader, CardContent, CardActions } from '@shadcn-mui/components';
+import { Card, CardHeader, CardContent, CardActions } from 'mui-cascade';
 
 function MyCard() {
   return (
@@ -109,7 +109,7 @@ function MyCard() {
 Text fields for user data entry.
 
 ```jsx
-import { Input } from '@shadcn-mui/components';
+import { Input } from 'mui-cascade';
 import { Search } from 'lucide-react';
 
 function MyInput() {
@@ -128,7 +128,7 @@ function MyInput() {
 Small status descriptors for UI elements.
 
 ```jsx
-import { Badge } from '@shadcn-mui/components';
+import { Badge } from 'mui-cascade';
 
 function MyBadge() {
   return (
@@ -146,7 +146,7 @@ function MyBadge() {
 Dialogs that temporarily overlay content.
 
 ```jsx
-import { Modal, Button } from '@shadcn-mui/components';
+import { Modal, Button } from 'mui-cascade';
 import { useState } from 'react';
 
 function MyModal() {
