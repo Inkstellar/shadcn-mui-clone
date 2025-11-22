@@ -18,6 +18,7 @@ import { createCustomTheme } from 'mui-cascade';
 import HomePage from './pages/HomePage';
 import DesignAssets from './pages/DesignAssets';
 import Components from './pages/Components';
+import CascadeMCP from './pages/CascadeMCP';
 import componentMenu from './components/layouts/componentMenu.tsx';
 import { componentDocsRegistry } from 'mui-cascade';
 import { navigation } from './navigation';
@@ -64,7 +65,7 @@ function AppContent() {
         <Typography variant="h6">Cascade UI</Typography>
         <Typography
           variant="body2"
-          sx={{ color: 'var(--muted-foreground)', marginTop: '4px' }}
+          sx={{ color: currentTheme.palette.text.secondary, marginTop: '4px' }}
         >
           FE fundinfo React UI Library
         </Typography>
@@ -86,8 +87,8 @@ function AppContent() {
           sx={{
             width: { md: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%' },
             ml: { md: drawerOpen ? `${drawerWidth}px` : 0 },
-            backgroundColor: 'var(--background)',
-            color: 'var(--foreground)',
+            backgroundColor: currentTheme.palette.background.default,
+            color: currentTheme.palette.text.primary,
             border: 'none',
             backdropFilter: 'blur(10px)',
             transition: 'margin 225ms cubic-bezier(0, 0, 0.2, 1), width 225ms cubic-bezier(0, 0, 0.2, 1)',
@@ -120,10 +121,10 @@ function AppContent() {
                 rel="noopener noreferrer"
                 startIcon={<Github />}
                 sx={{
-                  color: 'var(--muted-foreground)',
+                  color: currentTheme.palette.text.secondary,
                   '&:hover': {
-                    color: 'var(--primary)',
-                    backgroundColor: 'var(--secondary)',
+                    color: currentTheme.palette.primary.main,
+                    backgroundColor: currentTheme.palette.action.hover,
                   },
                 }}
               >
@@ -164,9 +165,9 @@ function AppContent() {
               '& .MuiDrawer-paper': {
                 boxSizing: 'border-box',
                 width: drawerWidth,
-                backgroundColor: 'var(--background)',
+                backgroundColor: currentTheme.palette.background.default,
                 borderRight: '1px solid',
-                borderColor: 'var(--border)',
+                borderColor: currentTheme.palette.divider,
                 transition: 'transform 225ms cubic-bezier(0, 0, 0.2, 1)',
               },
             }}
@@ -182,7 +183,7 @@ function AppContent() {
             p: 3,
             width: { md: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%' },
             minHeight: '100vh',
-            backgroundColor: 'var(--muted)',
+            backgroundColor: currentTheme.palette.background.paper,
             transition: 'width 225ms cubic-bezier(0, 0, 0.2, 1)',
           }}
         >
@@ -192,6 +193,7 @@ function AppContent() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/components" element={<Components />} />
+              <Route path="/mcp" element={<CascadeMCP />} />
               {/* Dynamic component doc routes */}
               {Object.entries(componentDocsRegistry).map(([key, { component: Component, path }]) => (
                 <Route key={key} path={path} element={<Component />} />

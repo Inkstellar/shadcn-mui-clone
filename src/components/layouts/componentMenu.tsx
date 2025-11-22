@@ -1,4 +1,4 @@
-import { Chip, Collapse, ListItemText, MenuItem, MenuList, Stack } from '@mui/material';
+import { Chip, Collapse, ListItemText, MenuItem, MenuList, Stack, useTheme } from '@mui/material';
 import { Link, Location } from 'react-router-dom';
 import { ChevronDown, ChevronRight, TestTube2, Package, StopCircle } from 'lucide-react';
 
@@ -34,9 +34,11 @@ export default function componentMenu(
     expandedSections: ExpandedSections,
     toggleSection: (section: string) => void
 ) {
+    const theme = useTheme();
+
     // Separate static items from categorized items
     const staticItems = navigation.filter(
-        (item) => item.href === '/' || item.href === '/assets'
+        (item) => item.href === '/' || item.href === '/assets' || item.href === '/mcp'
     );
 
     // Group items by their path prefix (e.g., /components/, /forms/, /hooks/, etc.)
@@ -78,11 +80,11 @@ export default function componentMenu(
                 sx={{
                     my: 0.5,
                     borderRadius: 1,
-                    color: isActive ? 'var(--primary)' : 'var(--muted-foreground)',
-                    backgroundColor: isActive ? 'var(--secondary)' : 'transparent',
+                    color: isActive ? theme.palette.primary.main : theme.palette.text.secondary,
+                    backgroundColor: isActive ? theme.palette.action.selected : 'transparent',
                     '&:hover': {
-                        backgroundColor: 'var(--secondary)',
-                        color: 'var(--primary)',
+                        backgroundColor: theme.palette.action.hover,
+                        color: theme.palette.primary.main,
                     },
                     textTransform: 'none',
                 }}
@@ -110,10 +112,10 @@ export default function componentMenu(
                     <MenuItem
                         sx={{
                             borderRadius: 1,
-                            color: 'var(--muted-foreground)',
+                            color: theme.palette.text.secondary,
                             '&:hover': {
-                                backgroundColor: 'var(--secondary)',
-                                color: 'var(--primary)',
+                                backgroundColor: theme.palette.action.hover,
+                                color: theme.palette.primary.main,
                             },
                             textTransform: 'none',
                             fontSize: '0.875rem',
@@ -137,10 +139,10 @@ export default function componentMenu(
                                 <MenuListItem key={item.name} name={item.name} href={item.href} isActive={isActive}>
                                     <Stack gap={1} direction="row" alignItems="center">
                                         <ListItemText secondary={item.name} />
-                                        {item.newitem && <Package size={16} color="#00a499" />}
-                                        {item.experimental && <TestTube2 size={16} color="#ef4444" />}
+                                        {item.newitem && <Package size={16} color={theme.palette.primary.main} />}
+                                        {item.experimental && <TestTube2 size={16} color={theme.palette.error.main} />}
                                         {item.deprecated && (
-                                            <StopCircle size={16} color="#ef4444" />
+                                            <StopCircle size={16} color={theme.palette.error.main} />
                                         )}
                                     </Stack>
                                 </MenuListItem>

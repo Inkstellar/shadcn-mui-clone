@@ -5,7 +5,7 @@ import {
   Card,
   CardContent,
   Grid,
-  Divider,
+  Stack,
   Container,
   useTheme,
   TextField,
@@ -13,6 +13,8 @@ import {
   Snackbar,
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { PricingCard } from 'mui-cascade';
+
 
 // Get colors and typography from the theme dynamically
 export default function DesignAssets() {
@@ -86,7 +88,7 @@ export default function DesignAssets() {
 
   const renderColorPalette = (name, palette) => (
     <Box sx={{ marginBottom: '48px' }}>
-      <Typography variant="h4" sx={{ marginBottom: '24px' }} color={`${name}`}>{name} Colors</Typography>
+      <Typography variant="h4" sx={{ marginBottom: '24px' }} id={`${name}Colors`}>{name} Colors</Typography>
       <Grid container spacing={1}>
         {Object.entries(palette).map(([key, value]) => (
           <Grid item xs={6} sm={4} md={3} lg={3} key={key}>
@@ -131,7 +133,7 @@ export default function DesignAssets() {
 
   const renderTypography = () => (
     <Box sx={{ marginBottom: '48px' }}>
-      <Typography variant="h3" sx={{ marginBottom: '24px' }}>Typography</Typography>
+      <Typography variant="h3" sx={{ marginBottom: '24px' }} id="typography">Typography</Typography>
       <TextField
         fullWidth
         label="Sample Text"
@@ -185,6 +187,7 @@ export default function DesignAssets() {
   const renderShadows = () => (
     <Box sx={{ marginBottom: '48px' }}>
       <Typography
+        id="shadows"
         variant="h3"
         sx={{
           fontSize: '1.5rem',
@@ -222,7 +225,7 @@ export default function DesignAssets() {
 
   const renderBorderRadius = () => (
     <Box sx={{ marginBottom: '48px' }}>
-      <Typography variant="h3">Border Radius</Typography>
+      <Typography variant="h3" id="borderRadius">Border Radius</Typography>
       <Grid container spacing={2}>
         {Object.entries(borderRadius).map(([key, value]) => (
           <Grid item xs={6} md={4} lg={3} key={key}>
@@ -264,7 +267,7 @@ export default function DesignAssets() {
 
   const renderSpacing = () => (
     <Box sx={{ marginBottom: '48px' }}>
-      <Typography variant="h3">
+      <Typography variant="h3" id="spacing">
         Spacing
       </Typography>
       <Card variant="outlined">
@@ -317,57 +320,60 @@ export default function DesignAssets() {
 
   return (
     <Container maxWidth="lg">
-      {/* Header */}
-      <Box sx={{ marginBottom: '80px' }}>
-        <Typography variant="h1" sx={{ mb: '24px' }}>Design Assets</Typography>
-        <Typography variant="body1" sx={{
-          fontSize: '1.25rem',
-          color: '#52525b',
-          marginBottom: '48px',
-          maxWidth: '600px',
-        }}>
-          A comprehensive design system with colors, typography, shadows,
-          and spacing. Everything you need to maintain consistency across your project.
-        </Typography>
-      </Box>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={10}>
+          <Box sx={{ px: { xs: 0, md: 12 } }}>
+            {/* Header */}
+            <Box sx={{ marginBottom: '80px' }}>
+              <Typography variant="h1" sx={{ mb: '24px' }}>Design Assets</Typography>
+              <Typography variant="body1" sx={{
+                fontSize: '1.25rem',
+                color: '#52525b',
+                marginBottom: '48px',
+                maxWidth: '600px',
+              }}>
+                A comprehensive design system with colors, typography, shadows,
+                and spacing. Everything you need to maintain consistency across your project.
+              </Typography>
+            </Box>
 
-      {/* Color Palettes */}
-      {Object.entries(colors).map(([name, palette]) => (
-        <React.Fragment key={name}>
-          {renderColorPalette(name, palette)}
-        </React.Fragment>
-      ))}
+            {/* Color Palettes */}
+            {Object.entries(colors).map(([name, palette]) => (
+              <React.Fragment key={name}>
+                {renderColorPalette(name, palette)}
+              </React.Fragment>
+            ))}
 
-      {/* Typography */}
-      {renderTypography()}
+            {/* Typography */}
+            {renderTypography()}
 
-      {/* Shadows */}
-      {renderShadows()}
+            {/* Shadows */}
+            {renderShadows()}
 
-      {/* Border Radius */}
-      {renderBorderRadius()}
+            {/* Border Radius */}
+            {renderBorderRadius()}
 
-      {/* Spacing */}
-      {renderSpacing()}
+            {/* Spacing */}
+            {renderSpacing()}
 
-      {/* CSS Variables */}
-      <Box sx={{ marginBottom: '48px' }}>
-        <Typography variant="h3">CSS Variables</Typography>
-        <Card variant="outlined">
-          <CardContent>
-            <Typography variant="body2">These CSS variables can be used directly in your stylesheets:</Typography>
-            <Box
-              component="pre"
-              sx={{
-                backgroundColor: 'var(--muted)',
-                padding: '16px',
-                borderRadius: '8px',
-                overflow: 'auto',
-                fontSize: '0.875rem',
-                fontFamily: 'Monaco, Consolas, monospace',
-              }}
-            >
-              {`:root {
+            {/* CSS Variables */}
+            <Box sx={{ marginBottom: '48px' }}>
+              <Typography variant="h3" id="cssVariables">CSS Variables</Typography>
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography variant="body2">These CSS variables can be used directly in your stylesheets:</Typography>
+                  <Box
+                    component="pre"
+                    sx={{
+                      backgroundColor: 'var(--muted)',
+                      padding: '16px',
+                      borderRadius: '8px',
+                      overflow: 'auto',
+                      fontSize: '0.875rem',
+                      fontFamily: 'Monaco, Consolas, monospace',
+                    }}
+                  >
+                    {`:root {
   --primary: ${theme.palette.primary.main};
   --primary-light: ${theme.palette.primary.light};
   --primary-dark: ${theme.palette.primary.dark};
@@ -389,19 +395,56 @@ export default function DesignAssets() {
   --grey-800: ${theme.palette.grey[800]};
   --grey-900: ${theme.palette.grey[900]};
 }`}
+                  </Box>
+                </CardContent>
+              </Card>
             </Box>
-          </CardContent>
-        </Card>
-      </Box>
 
-      {/* Toast notification */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={2000}
-        onClose={() => setSnackbarOpen(false)}
-        message={`Copied ${copiedValue}`}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      />
+            {/* Toast notification */}
+            <Snackbar
+              open={snackbarOpen}
+              autoHideDuration={2000}
+              onClose={() => setSnackbarOpen(false)}
+              message={`Copied ${copiedValue}`}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={2} sx={{ display: { xs: 'none', md: 'block' } }}>
+          <Stack spacing={1} sx={{ position: 'sticky', top: '64px' }}>
+            <Typography variant="caption" key="on-this-page">
+              On this page
+            </Typography>
+            {['primaryColors', 'secondaryColors', 'backgroundColors', 'textColors', 'greyColors', 'typography', 'shadows', 'borderRadius', 'spacing', 'cssVariables'].map((item) => (
+              <a
+                href={`#${item}`}
+                key={item}
+                style={{
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  fontSize: '0.875rem',
+                  display: 'block',
+                  padding: '4px 0',
+                  cursor: 'pointer',
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const element = document.getElementById(`${item}`);
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
+              >
+                {item}
+              </a>
+            ))}
+
+          </Stack>
+        </Grid>
+      </Grid>
+      <PricingCard />
     </Container>
   );
 }

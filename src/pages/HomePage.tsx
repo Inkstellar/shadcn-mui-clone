@@ -7,10 +7,10 @@ import {
   Grid,
   Chip,
 } from '@mui/material';
-import { ArrowRight, Code, Palette, Zap, Shield } from 'lucide-react';
+import { ArrowRight, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CardComp from '../components/ui/Card/Card';
-import { Button, themeOptions } from 'mui-cascade';
+import { Button } from 'mui-cascade';
 import { features, components } from '../data/dataContents';
 
 export default function HomePage() {

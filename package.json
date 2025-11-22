@@ -11,6 +11,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.70.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/docs": "^5.14.20",
@@ -19,6 +20,7 @@
     "@mui/system": "^5.14.20",
     "lucide-react": "^0.294.0",
     "mui-cascade": "^1.0.25",
+    "openai": "^6.9.1",
     "prismjs": "^1.29.0",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
@@ -28,6 +30,7 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@types/node": "^24.10.1",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@types/react-syntax-highlighter": "^15.5.11",
