@@ -12,8 +12,10 @@ import { Link } from 'react-router-dom';
 import CardComp from '../components/ui/Card/Card';
 import { Button } from 'mui-cascade';
 import { features, components } from '../data/dataContents';
+import useFullscreen from '../hooks/useFullscreen';
 
 export default function HomePage() {
+
   return (
     <Container maxWidth="md">
       {/* Hero Section */}
@@ -170,50 +172,7 @@ export default function HomePage() {
           {components.map((component, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Link to={component.href} style={{ textDecoration: 'none' }}>
-                <CardComp
-                  variant="outlined"
-                  interactive
-                  sx={{ height: '100%', padding: '24px' }}
-                >
-                  <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
-                      <Typography
-                        variant="h3"
-                        sx={{ fontSize: '1.125rem', fontWeight: 600, marginRight: '8px' }}
-                      >
-                        {component.name}
-                      </Typography>
-                      <Chip
-                        label="React"
-                        size="small"
-                        sx={{
-                          backgroundColor: 'var(--secondary)',
-                          color: 'var(--primary)',
-                          fontSize: '0.75rem',
-                        }}
-                      />
-                    </Box>
-                    <Typography
-                      variant="body2"
-                      sx={{ color: 'var(--muted-foreground)' }}
-                    >
-                      {component.description}
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        marginTop: '16px',
-                        color: 'var(--primary)',
-                        fontSize: '0.875rem',
-                        fontWeight: 500,
-                      }}
-                    >
-                      View component
-                      <ArrowRight size={16} style={{ marginLeft: '4px' }} />
-                    </Box>
-                  </CardContent>
-                </CardComp>
+                {componentHighlight(component)}
               </Link>
             </Grid>
           ))}
@@ -265,3 +224,58 @@ export default function HomePage() {
     </Container>
   );
 }
+function componentHighlight(component: { name: string; description: string; href: string; }) {
+
+  const { isFullscreen, toggleFullscreen, fullscreenStyles } = useFullscreen(component.name);
+
+  return <CardComp
+    variant="outlined"
+    interactive
+    sx={{ height: '100%', padding: '24px', ...fullscreenStyles }}
+    id={component.name}
+  >
+    <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+        <Typography
+          variant="h3"
+          sx={{ fontSize: '1.125rem', fontWeight: 600, marginRight: '8px' }}
+        >
+          {component.name}
+        </Typography>
+        <Chip
+          label="React"
+          size="small"
+          sx={{
+            backgroundColor: 'var(--secondary)',
+            color: 'var(--primary)',
+            fontSize: '0.75rem',
+          }} />
+      </Box>
+      <Typography
+        variant="body2"
+        sx={{ color: 'var(--muted-foreground)' }}
+      >
+        {component.description}
+      </Typography>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          marginTop: '16px',
+          color: 'var(--primary)',
+          fontSize: '0.875rem',
+          fontWeight: 500,
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          toggleFullscreen()
+        }}
+      >
+        View component
+        <ArrowRight size={16} style={{ marginLeft: '4px' }} />
+      </Box>
+    </CardContent>
+  </CardComp>;
+}
+

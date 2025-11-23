@@ -139,7 +139,7 @@ export default function componentMenu(
                                 <MenuListItem key={item.name} name={item.name} href={item.href} isActive={isActive}>
                                     <Stack gap={1} direction="row" alignItems="center">
                                         <ListItemText secondary={item.name} />
-                                        {item.newitem && <Package size={16} color={theme.palette.primary.main} />}
+                                        {item.newitem && <Package size={16} color={'#00a499'} />}
                                         {item.experimental && <TestTube2 size={16} color={theme.palette.error.main} />}
                                         {item.deprecated && (
                                             <StopCircle size={16} color={theme.palette.error.main} />

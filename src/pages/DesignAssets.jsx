@@ -444,7 +444,6 @@ export default function DesignAssets() {
           </Stack>
         </Grid>
       </Grid>
-      <PricingCard />
     </Container>
   );
 }

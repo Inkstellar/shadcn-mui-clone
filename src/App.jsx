@@ -22,6 +22,7 @@ import CascadeMCP from './pages/CascadeMCP';
 import componentMenu from './components/layouts/componentMenu.tsx';
 import { componentDocsRegistry } from 'mui-cascade';
 import { navigation } from './navigation';
+import { FullscreenProvider } from './hooks/useFullscreen';
 import './app.css';
 import logoImage from '../assets/images/fefundinfo_logo_colour_rgb.svg';
 
@@ -193,7 +194,7 @@ function AppContent() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/components" element={<Components />} />
-              <Route path="/mcp" element={<CascadeMCP />} />
+              <Route path="/cascade-mcp " element={<CascadeMCP />} />
               {/* Dynamic component doc routes */}
               {Object.entries(componentDocsRegistry).map(([key, { component: Component, path }]) => (
                 <Route key={key} path={path} element={<Component />} />
@@ -211,7 +212,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
+      <FullscreenProvider>
+        <AppContent />
+      </FullscreenProvider>
     </Router>
   );
 }

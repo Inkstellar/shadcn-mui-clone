@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useFullscreen from '../hooks/useFullscreen';
 import {
     Container,
     Box,
@@ -26,7 +27,7 @@ import { ContentCopy, PlayArrow, Code, Visibility } from '@mui/icons-material';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import OpenAI from 'openai';
-import { Settings, ChevronDown, ChevronRight } from 'lucide-react';
+import { Settings, ChevronDown, ChevronRight, Scaling } from 'lucide-react';
 
 interface GeneratedComponent {
     code: string;
@@ -108,6 +109,9 @@ export default function CascadeMCP() {
     const [temperature, setTemperature] = useState(0.7);
     const [maxTokens, setMaxTokens] = useState(2048);
     const [advancedSettingsOpen, setAdvancedSettingsOpen] = useState(false);
+
+    // Fullscreen hook
+    const { isFullscreen, toggleFullscreen, fullscreenStyles } = useFullscreen('ai-playground');
 
     const generateComponent = async () => {
         if (!prompt.trim()) {
@@ -278,7 +282,15 @@ root.render(
                 <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
                     Describe a UI component and watch it come to life with MUI and mui-cascade
                 </Typography>
-                <Paper sx={{ boxShadow: 'none', border: '1px solid', borderColor: 'divider', }}>
+                <Paper
+                    id="ai-playground"
+                    sx={{
+                        boxShadow: 'none',
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        ...fullscreenStyles,
+                    }}
+                >
                     <Stack direction="row" gap={2} alignItems="center" sx={{ px: 3, height: 72, borderBottom: '1px solid', borderColor: 'divider', }}>
                         <Typography variant="h6" >
                             Build your component
@@ -302,7 +314,6 @@ root.render(
                         <Box sx={{ flex: 1 }}></Box>
                         {generatedCode ? (
                             <>
-
                                 <Tabs value={activeTab} onChange={(_, v) => setActiveTab(v)}>
                                     <Tab icon={<Visibility />} label="Preview" />
                                     <Tab icon={<Code />} label="Code" />
@@ -310,6 +321,15 @@ root.render(
                             </>
                         ) : null}
                         <IconButton
+                            key={"scaling"}
+                            size="small"
+                            onClick={toggleFullscreen}
+                            title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                        >
+                            <Scaling size={20} />
+                        </IconButton>
+                        <IconButton
+                            key={"settings"}
                             size="small"
                             onClick={(e) => setSettingsAnchor(e.currentTarget)}
                         >
@@ -419,10 +439,10 @@ root.render(
                             </Collapse>
                         </Menu>
                     </Stack>
-                    <Grid container>
+                    <Grid container height={isFullscreen ? 'calc(100vh - 72px)' : 'auto'}>
                         {/* Input Section */}
                         <Grid item xs={12} md={4}>
-                            <Box sx={{ p: 3, borderRight: '1px solid', borderColor: 'divider', }}>
+                            <Box sx={{ p: 3, borderRight: '1px solid', borderColor: 'divider', height: '100%' }}>
 
 
                                 <TextField
