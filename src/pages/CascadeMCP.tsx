@@ -20,12 +20,13 @@ import {
     FormControl,
     InputLabel,
     Divider,
+    Collapse,
 } from '@mui/material';
 import { ContentCopy, PlayArrow, Code, Visibility } from '@mui/icons-material';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import OpenAI from 'openai';
-import { MoreHorizontal, Settings } from 'lucide-react';
+import { Settings, ChevronDown, ChevronRight } from 'lucide-react';
 
 interface GeneratedComponent {
     code: string;
@@ -106,6 +107,7 @@ export default function CascadeMCP() {
     const [selectedModel, setSelectedModel] = useState('deepseek-chat');
     const [temperature, setTemperature] = useState(0.7);
     const [maxTokens, setMaxTokens] = useState(2048);
+    const [advancedSettingsOpen, setAdvancedSettingsOpen] = useState(false);
 
     const generateComponent = async () => {
         if (!prompt.trim()) {
@@ -360,38 +362,61 @@ root.render(
 
                             <Divider sx={{ mb: 2 }} />
 
-                            <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                                Temperature: {temperature.toFixed(2)}
-                            </Typography>
-                            <Slider
-                                value={temperature}
-                                onChange={(_, value) => setTemperature(value as number)}
-                                min={0}
-                                max={1}
-                                step={0.1}
-                                marks={[
-                                    { value: 0, label: '0' },
-                                    { value: 0.5, label: '0.5' },
-                                    { value: 1, label: '1' },
-                                ]}
-                                sx={{ mb: 3 }}
-                            />
+                            <Box
+                                onClick={() => setAdvancedSettingsOpen(!advancedSettingsOpen)}
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    cursor: 'pointer',
+                                    mb: 1,
+                                    '&:hover': {
+                                        opacity: 0.7,
+                                    },
+                                }}
+                            >
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                    Advanced Settings
+                                </Typography>
+                                {advancedSettingsOpen ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                            </Box>
 
-                            <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                                Max Tokens: {maxTokens}
-                            </Typography>
-                            <Slider
-                                value={maxTokens}
-                                onChange={(_, value) => setMaxTokens(value as number)}
-                                min={512}
-                                max={4096}
-                                step={256}
-                                marks={[
-                                    { value: 512, label: '512' },
-                                    { value: 2048, label: '2K' },
-                                    { value: 4096, label: '4K' },
-                                ]}
-                            />
+                            <Collapse in={advancedSettingsOpen}>
+                                <Box sx={{ pt: 2 }}>
+                                    <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
+                                        Temperature: {temperature.toFixed(2)}
+                                    </Typography>
+                                    <Slider
+                                        value={temperature}
+                                        onChange={(_, value) => setTemperature(value as number)}
+                                        min={0}
+                                        max={1}
+                                        step={0.1}
+                                        marks={[
+                                            { value: 0, label: '0' },
+                                            { value: 0.5, label: '0.5' },
+                                            { value: 1, label: '1' },
+                                        ]}
+                                        sx={{ mb: 3 }}
+                                    />
+
+                                    <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
+                                        Max Tokens: {maxTokens}
+                                    </Typography>
+                                    <Slider
+                                        value={maxTokens}
+                                        onChange={(_, value) => setMaxTokens(value as number)}
+                                        min={512}
+                                        max={4096}
+                                        step={256}
+                                        marks={[
+                                            { value: 512, label: '512' },
+                                            { value: 2048, label: '2K' },
+                                            { value: 4096, label: '4K' },
+                                        ]}
+                                    />
+                                </Box>
+                            </Collapse>
                         </Menu>
                     </Stack>
                     <Grid container>
