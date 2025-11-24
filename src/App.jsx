@@ -26,6 +26,7 @@ import componentMenu from './components/layouts/componentMenu.tsx';
 import { navigation } from './navigation';
 import './app.css';
 import logoImage from '../assets/images/fefundinfo_logo_colour_rgb.svg';
+import nexusBg from '../assets/images/nexus-bg.png';
 
 const drawerWidth = 280;
 
@@ -165,7 +166,7 @@ function AppContent() {
   };
 
   const drawer = (
-    <Box sx={{ overflow: 'auto' }}>
+    <Box sx={{ overflow: 'auto',  }}>
       <Box sx={{ p: 2 }}>
         <img src={logoImage} alt="FE fundinfo Logo" style={{ maxWidth: '200px', marginBottom: '16px' }} />
         <Typography variant="h6">Cascade UI</Typography>
@@ -181,7 +182,13 @@ function AppContent() {
     </Box>
   );
 
+  const bgImageStyle = {
+    backgroundImage: `url(${nexusBg})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  };
 
+  const isLoginPage = location.pathname === '/login';
 
   return (
     <ThemeProvider theme={currentTheme}>
@@ -193,10 +200,13 @@ function AppContent() {
           sx={{
             width: { md: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%' },
             ml: { md: drawerOpen ? `${drawerWidth}px` : 0 },
-            backgroundColor: currentTheme.palette.background.default,
+            backgroundColor: darkMode 
+              ? 'rgba(18, 18, 18, 0.6)' 
+              : 'rgba(255, 255, 255, 0.6)',
             color: currentTheme.palette.text.primary,
             border: 'none',
-            backdropFilter: 'blur(10px)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)', // Safari support
             transition: 'margin 225ms cubic-bezier(0, 0, 0.2, 1), width 225ms cubic-bezier(0, 0, 0.2, 1)',
           }}
         >
@@ -288,9 +298,10 @@ function AppContent() {
             flexGrow: 1,
             p: 3,
             width: { md: drawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%' },
-            minHeight: '100vh',
+            minHeight: 'calc(100vh - 64px)',
             backgroundColor: currentTheme.palette.background.paper,
             transition: 'width 225ms cubic-bezier(0, 0, 0.2, 1)',
+            ...(isLoginPage ? bgImageStyle : {}),
           }}
         >
           <Toolbar />

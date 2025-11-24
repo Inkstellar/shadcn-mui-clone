@@ -22,7 +22,6 @@ A beautiful and accessible React component library built with Material-UI (MUI).
 ```bash
 npm install @mui/material @mui/icons-material @emotion/react @emotion/styled
 ```
-
 Or if you're starting fresh:
 
 ```bash

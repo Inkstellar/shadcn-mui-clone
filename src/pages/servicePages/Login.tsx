@@ -49,13 +49,14 @@ export default function Login() {
     }
 
     return (
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" sx={{ py: 0 }}>
             <Box
                 sx={{
-                    minHeight: '100vh',
+                    minHeight: 'calc(100vh - 120px)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+
                 }}
             >
                 <Paper
@@ -66,6 +67,9 @@ export default function Login() {
                         border: '1px solid',
                         borderColor: 'divider',
                         borderRadius: 2,
+                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                        backdropFilter: 'blur(4px)',
+                        WebkitBackdropFilter: 'blur(4px)', // Safari support
                     }}
                 >
                     <Stack spacing={3} alignItems="center">
