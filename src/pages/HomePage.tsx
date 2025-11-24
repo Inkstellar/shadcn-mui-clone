@@ -6,15 +6,16 @@ import {
   CardContent,
   Grid,
   Chip,
+  useTheme,
 } from '@mui/material';
 import { ArrowRight, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import CardComp from '../components/ui/Card/Card';
 import { Button } from 'mui-cascade';
 import { features, components } from '../data/dataContents';
-import useFullscreen from '../hooks/useFullscreen';
 
 export default function HomePage() {
+  const theme = useTheme();
 
   return (
     <Container maxWidth="md">
@@ -25,8 +26,9 @@ export default function HomePage() {
             display: 'inline-flex',
             alignItems: 'center',
             padding: '8px 16px',
-            backgroundColor: 'var(--secondary)',
-            border: '1px solid var(--border)',
+            backgroundColor: theme.palette.action.hover,
+            border: '1px solid',
+            borderColor: theme.palette.divider,
             borderRadius: '24px',
             marginBottom: '32px',
           }}
@@ -98,7 +100,7 @@ export default function HomePage() {
               <Typography variant="h4" sx={{ marginBottom: '16px' }}>
                 Beautiful Components
               </Typography>
-              <Typography variant="body1" sx={{ color: 'var(--muted-foreground)' }}>
+              <Typography variant="body1" sx={{ color: theme.palette.text.secondary }}>
                 These components are designed to work seamlessly with your Material-UI
                 application while providing a consistent and professional look.
               </Typography>
@@ -130,7 +132,7 @@ export default function HomePage() {
                     sx={{
                       width: '48px',
                       height: '48px',
-                      backgroundColor: 'var(--primary)',
+                      backgroundColor: theme.palette.primary.main,
                       borderRadius: '12px',
                       display: 'flex',
                       alignItems: 'center',
@@ -144,7 +146,7 @@ export default function HomePage() {
                   <Typography variant="h3" sx={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '12px' }}>
                     {feature.title}
                   </Typography>
-                  <Typography variant="body1" sx={{ color: 'var(--muted-foreground)' }}>
+                  <Typography variant="body1" sx={{ color: theme.palette.text.secondary }}>
                     {feature.description}
                   </Typography>
                 </CardContent>
@@ -172,7 +174,7 @@ export default function HomePage() {
           {components.map((component, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Link to={component.href} style={{ textDecoration: 'none' }}>
-                {componentHighlight(component)}
+                {componentHighlight(component, theme)}
               </Link>
             </Grid>
           ))}
@@ -184,7 +186,7 @@ export default function HomePage() {
         sx={{
           textAlign: 'center',
           padding: '80px 20px',
-          backgroundColor: 'var(--secondary)',
+          backgroundColor: theme.palette.action.hover,
           borderRadius: '24px',
           marginBottom: '80px',
         }}
@@ -203,7 +205,7 @@ export default function HomePage() {
           variant="body1"
           sx={{
             fontSize: '1.125rem',
-            color: 'var(--muted-foreground)',
+            color: theme.palette.text.secondary,
             marginBottom: '32px',
             maxWidth: '500px',
             margin: '0 auto 32px',
@@ -224,14 +226,12 @@ export default function HomePage() {
     </Container>
   );
 }
-function componentHighlight(component: { name: string; description: string; href: string; }) {
-
-  const { isFullscreen, toggleFullscreen, fullscreenStyles } = useFullscreen(component.name);
+function componentHighlight(component: { name: string; description: string; href: string; }, theme: any) {
 
   return <CardComp
     variant="outlined"
     interactive
-    sx={{ height: '100%', padding: '24px', ...fullscreenStyles }}
+    sx={{ height: '100%', padding: '24px', }}
     id={component.name}
   >
     <CardContent sx={{ padding: 0, '&:last-child': { paddingBottom: 0 } }}>
@@ -246,14 +246,14 @@ function componentHighlight(component: { name: string; description: string; href
           label="React"
           size="small"
           sx={{
-            backgroundColor: 'var(--secondary)',
-            color: 'var(--primary)',
+            backgroundColor: theme.palette.action.hover,
+            color: theme.palette.primary.main,
             fontSize: '0.75rem',
           }} />
       </Box>
       <Typography
         variant="body2"
-        sx={{ color: 'var(--muted-foreground)' }}
+        sx={{ color: theme.palette.text.secondary }}
       >
         {component.description}
       </Typography>
@@ -262,14 +262,9 @@ function componentHighlight(component: { name: string; description: string; href
           display: 'flex',
           alignItems: 'center',
           marginTop: '16px',
-          color: 'var(--primary)',
+          color: theme.palette.primary.main,
           fontSize: '0.875rem',
           fontWeight: 500,
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          toggleFullscreen()
         }}
       >
         View component

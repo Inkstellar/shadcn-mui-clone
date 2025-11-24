@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import useFullscreen from '../hooks/useFullscreen';
+import { themeOptions, useFullscreen } from 'mui-cascade';
 import {
     Container,
     Box,
@@ -27,7 +27,7 @@ import { ContentCopy, PlayArrow, Code, Visibility } from '@mui/icons-material';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import OpenAI from 'openai';
-import { Settings, ChevronDown, ChevronRight, Scaling } from 'lucide-react';
+import { Settings, ChevronDown, ChevronRight, Scaling, Codesandbox } from 'lucide-react';
 
 interface GeneratedComponent {
     code: string;
@@ -197,7 +197,6 @@ export default function CascadeMCP() {
     const handleCopy = async () => {
         if (generatedCode) {
             await navigator.clipboard.writeText(generatedCode.code);
-            setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         }
     };
@@ -282,17 +281,14 @@ root.render(
                 <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
                     Describe a UI component and watch it come to life with MUI and mui-cascade
                 </Typography>
-                <Paper
-                    id="ai-playground"
-                    sx={{
-                        boxShadow: 'none',
-                        border: '1px solid',
-                        borderColor: 'divider',
-                        ...fullscreenStyles,
-                    }}
-                >
-                    <Stack direction="row" gap={2} alignItems="center" sx={{ px: 3, height: 72, borderBottom: '1px solid', borderColor: 'divider', }}>
-                        <Typography variant="h6" >
+                <Paper id="ai-playground" sx={{
+                    boxShadow: 'none',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    ...fullscreenStyles,
+                }}>
+                    <Stack direction="row" gap={2} alignItems="center" sx={{ px: 3, height: 72, borderBottom: '1px solid', borderColor: 'divider' }}>
+                        <Typography variant="h6">
                             Build your component
                         </Typography>
                         <TextField
@@ -443,40 +439,40 @@ root.render(
                         {/* Input Section */}
                         <Grid item xs={12} md={4}>
                             <Box sx={{ p: 3, borderRight: '1px solid', borderColor: 'divider', height: '100%' }}>
+                                <Box sx={{ position: 'sticky', top: 80, zIndex: 1, backgroundColor: 'background.paper' }}>
+                                    <TextField
+                                        fullWidth
+                                        multiline
+                                        rows={8}
+                                        label="Write your own prompt"
+                                        placeholder="e.g., Create a dashboard card showing user statistics with an icon and number"
+                                        value={prompt}
+                                        onChange={(e) => setPrompt(e.target.value)}
+                                        sx={{ mb: 2 }}
+                                    />
 
+                                    <Button
+                                        variant="contained"
+                                        fullWidth
+                                        size="large"
+                                        onClick={generateComponent}
+                                        disabled={loading}
+                                        startIcon={loading ? <CircularProgress size={20} /> : <PlayArrow />}
+                                    >
+                                        {loading ? 'Generating...' : 'Generate Component'}
+                                    </Button>
 
-                                <TextField
-                                    fullWidth
-                                    multiline
-                                    rows={8}
-                                    label="Write your own prompt"
-                                    placeholder="e.g., Create a dashboard card showing user statistics with an icon and number"
-                                    value={prompt}
-                                    onChange={(e) => setPrompt(e.target.value)}
-                                    sx={{ mb: 2 }}
-                                />
+                                    {error && (
+                                        <Alert severity="error" sx={{ mt: 2 }}>
+                                            {error}
+                                        </Alert>
+                                    )}
 
-                                <Button
-                                    variant="contained"
-                                    fullWidth
-                                    size="large"
-                                    onClick={generateComponent}
-                                    disabled={loading}
-                                    startIcon={loading ? <CircularProgress size={20} /> : <PlayArrow />}
-                                >
-                                    {loading ? 'Generating...' : 'Generate Component'}
-                                </Button>
-
-                                {error && (
-                                    <Alert severity="error" sx={{ mt: 2 }}>
-                                        {error}
-                                    </Alert>
-                                )}
-
-                                <Box sx={{ mt: 3 }}>
-                                    <Typography variant="caption" color="text.secondary">
-                                        💡 Tip: Be specific about the components you want to use (Button, Card, Input, Modal, etc.)
-                                    </Typography>
+                                    <Box sx={{ mt: 3 }}>
+                                        <Typography variant="caption" color="text.secondary">
+                                            💡 Tip: Be specific about the components you want to use (Button, Card, Input, Modal, etc.)
+                                        </Typography>
+                                    </Box>
                                 </Box>
                             </Box>
                         </Grid>
@@ -521,6 +517,8 @@ root.render(
                                                         size="small"
                                                         variant="contained"
                                                         onClick={exportToCodeSandbox}
+                                                        startIcon={<Codesandbox size={20} />}
+                                                        color={themeOptions.palette?.mode === 'dark' ? 'primary' : 'secondary'}
                                                     >
                                                         Open in CodeSandbox
                                                     </Button>
@@ -532,7 +530,6 @@ root.render(
                                                         borderColor: 'divider',
                                                         borderRadius: 2,
                                                         overflow: 'auto',
-                                                        maxHeight: 500,
                                                     }}
                                                 >
                                                     <SyntaxHighlighter
@@ -549,6 +546,22 @@ root.render(
                                             </Box>
                                         )}
                                     </>
+                                ) : loading ? (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            minHeight: 400,
+                                            gap: 2,
+                                        }}
+                                    >
+                                        <CircularProgress size={36} />
+                                        <Typography variant="h6" sx={{ color: 'text.secondary' }}>
+                                            Thinking...
+                                        </Typography>
+                                    </Box>
                                 ) : (
                                     <Box
                                         sx={{

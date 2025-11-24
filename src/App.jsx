@@ -1,5 +1,5 @@
 import React, { useState, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import {
   ThemeProvider,
   CssBaseline,
@@ -12,21 +12,126 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
+  Avatar,
+  Menu as MuiMenu,
+  MenuItem,
 } from '@mui/material';
-import { Menu, Sun, Moon, Github } from 'lucide-react';
-import { createCustomTheme } from 'mui-cascade';
-import HomePage from './pages/HomePage';
-import DesignAssets from './pages/DesignAssets';
-import Components from './pages/Components';
-import CascadeMCP from './pages/CascadeMCP';
+import { Menu, Sun, Moon, Github, LogIn, LogOut, User } from 'lucide-react';
+import { MsalProvider, useMsal, useIsAuthenticated } from '@azure/msal-react';
+import { PublicClientApplication } from '@azure/msal-browser';
+import { msalConfig } from './config/authConfig';
+import { createCustomTheme, FullscreenProvider } from 'mui-cascade';
+import AppRoutes from './routes';
 import componentMenu from './components/layouts/componentMenu.tsx';
-import { componentDocsRegistry } from 'mui-cascade';
 import { navigation } from './navigation';
-import { FullscreenProvider } from './hooks/useFullscreen';
 import './app.css';
 import logoImage from '../assets/images/fefundinfo_logo_colour_rgb.svg';
 
 const drawerWidth = 280;
+
+// Initialize MSAL instance
+const msalInstance = new PublicClientApplication(msalConfig);
+
+function AuthButton() {
+  const { instance, accounts } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleLogin = () => {
+    instance.loginPopup().catch(e => {
+      console.error(e);
+    });
+  };
+
+  const handleLogout = () => {
+    instance.logoutPopup().catch(e => {
+      console.error(e);
+    });
+    setAnchorEl(null);
+  };
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <Button
+        startIcon={<LogIn size={18} />}
+        onClick={handleLogin}
+        sx={{
+          color: 'text.secondary',
+          '&:hover': {
+            color: 'primary.main',
+            backgroundColor: 'action.hover',
+          },
+        }}
+      >
+        Sign In
+      </Button>
+    );
+  }
+
+  const account = accounts[0];
+
+  return (
+    <>
+      <IconButton
+        onClick={handleMenuOpen}
+        sx={{
+          color: 'text.secondary',
+          '&:hover': {
+            color: 'primary.main',
+            backgroundColor: 'action.hover',
+          },
+        }}
+      >
+        <Avatar
+          sx={{
+            width: 32,
+            height: 32,
+            bgcolor: 'primary.main',
+            fontSize: '0.875rem',
+          }}
+        >
+          {account?.name?.charAt(0) || 'U'}
+        </Avatar>
+      </IconButton>
+      <MuiMenu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem disabled>
+          <Box>
+            <Typography variant="body2" fontWeight={600}>
+              {account?.name}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {account?.username}
+            </Typography>
+          </Box>
+        </MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <LogOut size={18} style={{ marginRight: 8 }} />
+          Sign Out
+        </MenuItem>
+      </MuiMenu>
+    </>
+  );
+}
 
 function AppContent() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -116,8 +221,7 @@ function AppContent() {
               </IconButton>
 
               <Button
-                component="a"
-                href="https://github.com"
+                href="https://github.com/yourusername/cascade-ui"
                 target="_blank"
                 rel="noopener noreferrer"
                 startIcon={<Github />}
@@ -131,6 +235,7 @@ function AppContent() {
               >
                 GitHub
               </Button>
+              <AuthButton />
             </Box>
           </Toolbar>
         </AppBar>
@@ -191,16 +296,7 @@ function AppContent() {
           <Toolbar />
 
           <Suspense fallback={<div>Loading...</div>}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/components" element={<Components />} />
-              <Route path="/cascade-mcp " element={<CascadeMCP />} />
-              {/* Dynamic component doc routes */}
-              {Object.entries(componentDocsRegistry).map(([key, { component: Component, path }]) => (
-                <Route key={key} path={path} element={<Component />} />
-              ))}
-              <Route path="/assets" element={<DesignAssets />} />
-            </Routes>
+            <AppRoutes />
           </Suspense>
         </Box>
       </Box>
@@ -211,11 +307,13 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <FullscreenProvider>
-        <AppContent />
-      </FullscreenProvider>
-    </Router>
+    <MsalProvider instance={msalInstance}>
+      <Router>
+        <FullscreenProvider>
+          <AppContent />
+        </FullscreenProvider>
+      </Router>
+    </MsalProvider>
   );
 }
 
