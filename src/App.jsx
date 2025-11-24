@@ -17,9 +17,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import { Menu, Sun, Moon, Github, LogIn, LogOut, User } from 'lucide-react';
-import { MsalProvider, useMsal, useIsAuthenticated } from '@azure/msal-react';
-import { PublicClientApplication } from '@azure/msal-browser';
-import { msalConfig } from './config/authConfig';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { createCustomTheme, FullscreenProvider } from 'mui-cascade';
 import AppRoutes from './routes';
 import componentMenu from './components/layouts/componentMenu.tsx';
@@ -30,22 +28,18 @@ import nexusBg from '../assets/images/nexus-bg.png';
 
 const drawerWidth = 280;
 
-// Initialize MSAL instance
-const msalInstance = new PublicClientApplication(msalConfig);
-
 function AuthButton() {
-  const { instance, accounts } = useMsal();
-  const isAuthenticated = useIsAuthenticated();
+  const { user, isAuthenticated, signIn, signOut } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleLogin = () => {
-    instance.loginPopup().catch(e => {
+    signIn().catch(e => {
       console.error(e);
     });
   };
 
   const handleLogout = () => {
-    instance.logoutPopup().catch(e => {
+    signOut().catch(e => {
       console.error(e);
     });
     setAnchorEl(null);
@@ -77,7 +71,7 @@ function AuthButton() {
     );
   }
 
-  const account = accounts[0];
+  const account = user?.profile;
 
   return (
     <>
@@ -318,13 +312,13 @@ function AppContent() {
 
 function App() {
   return (
-    <MsalProvider instance={msalInstance}>
-      <Router>
+    <Router>
+      <AuthProvider>
         <FullscreenProvider>
           <AppContent />
         </FullscreenProvider>
-      </Router>
-    </MsalProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 

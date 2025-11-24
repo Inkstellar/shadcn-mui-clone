@@ -1,37 +1,59 @@
-import { Configuration, PopupRequest } from '@azure/msal-browser';
-
 /**
- * Configuration object to be passed to MSAL instance on creation
- * For a full list of MSAL.js configuration parameters, visit:
- * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/configuration.md
+ * Enterprise Auth runtime configuration loader.
+ * Replaces static MSAL configuration with a dynamic fetch of OpenID Connect settings.
+ * The expected JSON shape is documented in enterprise-auth.md (env-config.json).
  */
-export const msalConfig: Configuration = {
+export interface EnterpriseAuthConfigRaw {
+    publicUrl?: string;
     auth: {
-        clientId: import.meta.env.VITE_AZURE_CLIENT_ID || '',
-        authority: import.meta.env.VITE_AZURE_AUTHORITY || 'https://login.microsoftonline.com/common',
-        redirectUri: import.meta.env.VITE_AZURE_REDIRECT_URI || window.location.origin,
-    },
-    cache: {
-        cacheLocation: 'sessionStorage', // This configures where your cache will be stored
-        storeAuthStateInCookie: false, // Set this to "true" if you are having issues on IE11 or Edge
+        authority: string;
+        client_id: string;
+        redirect_uri: string;
+        post_logout_redirect_uri?: string;
+        response_type?: string;
+        scope: string;
+        automaticSilentRenew?: boolean;
+        loadUserInfo?: boolean;
+        monitorAnonymousSession?: boolean;
+        filterProtocolClaims?: boolean;
+        revokeAccessTokenOnSignout?: boolean;
+    };
+}
+
+const ENV_FALLBACK: EnterpriseAuthConfigRaw = {
+    publicUrl: (import.meta as any).env.BASE_URL || 'http://localhost:8080',
+    auth: {
+        authority: (import.meta as any).env.VITE_AUTH_AUTHORITY || 'https://prep-auth.fefundinfo.com',
+        client_id: (import.meta as any).env.VITE_AZURE_CLIENT_ID || 'ams-portal-local',
+        redirect_uri: (import.meta as any).env.VITE_AZURE_REDIRECT_URI || 'http://localhost:8080/signin-oidc',
+        post_logout_redirect_uri: (import.meta as any).env.VITE_AZURE_REDIRECT_URI || 'http://localhost:8080/',
+        response_type: 'code',
+        scope: (import.meta as any).env.VITE_AUTH_SCOPE || 'openid profile offline_access ams-read-write',
+        automaticSilentRenew: false,
+        loadUserInfo: true,
+        monitorAnonymousSession: true,
+        filterProtocolClaims: true,
+        revokeAccessTokenOnSignout: true,
     },
 };
 
 /**
- * Scopes you add here will be prompted for user consent during sign-in.
- * By default, MSAL.js will add OIDC scopes (openid, profile, email) to any login request.
- * For more information about OIDC scopes, visit:
- * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
+ * Fetch config from /config/env-config.json, falling back to environment variables.
  */
-export const loginRequest: PopupRequest = {
-    scopes: ['User.Read'],
-};
+export async function loadEnterpriseAuthConfig(): Promise<EnterpriseAuthConfigRaw> {
+    try {
+        const res = await fetch('/config/env-config.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('Config fetch failed');
+        const json = await res.json();
+        if (!json.auth || !json.auth.authority || !json.auth.client_id || !json.auth.redirect_uri || !json.auth.scope) {
+            console.warn('[authConfig] Invalid config shape received; using fallback');
+            return ENV_FALLBACK;
+        }
+        return json as EnterpriseAuthConfigRaw;
+    } catch (e) {
+        console.warn('[authConfig] Using fallback auth configuration:', e instanceof Error ? e.message : e);
+        return ENV_FALLBACK;
+    }
+}
 
-/**
- * Add here the scopes to request when obtaining an access token for MS Graph API.
- * For more information, see:
- * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-browser/docs/resources-and-scopes.md
- */
-export const graphConfig = {
-    graphMeEndpoint: 'https://graph.microsoft.com/v1.0/me',
-};
+export type { EnterpriseAuthConfigRaw as AuthConfig };

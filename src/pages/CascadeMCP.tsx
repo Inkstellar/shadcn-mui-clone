@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { themeOptions, useFullscreen } from 'mui-cascade';
+import { useAuth } from '../contexts/AuthContext';
 import {
     Container,
     Box,
@@ -22,10 +23,10 @@ import {
     InputLabel,
     Divider,
     Collapse,
+    Chip,
 } from '@mui/material';
 import { ContentCopy, PlayArrow, Code, Visibility } from '@mui/icons-material';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Editor } from '@monaco-editor/react';
 import OpenAI from 'openai';
 import { Settings, ChevronDown, ChevronRight, Scaling, Codesandbox } from 'lucide-react';
 
@@ -79,10 +80,14 @@ const AVAILABLE_MODELS = [
     { value: 'deepseek-chat', label: 'DeepSeek Chat', provider: 'deepseek' },
     { value: 'deepseek-coder', label: 'DeepSeek Coder', provider: 'deepseek' },
 
-    // OpenAI Models
-    { value: 'gpt-4-turbo-preview', label: 'GPT-4 Turbo', provider: 'openai' },
-    { value: 'gpt-4', label: 'GPT-4', provider: 'openai' },
-    { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo', provider: 'openai' },
+    // OpenAI Models (Custom Endpoint)
+    { value: 'gpt-4o', label: 'GPT-4', provider: 'openai' },
+    { value: 'gpt-4.5', label: 'GPT-4.5', provider: 'openai' },
+
+    // Standard OpenAI Models
+    { value: 'gpt-4-turbo-preview', label: 'GPT-4 Turbo', provider: 'openai-standard' },
+    { value: 'gpt-4', label: 'GPT-4 (Standard)', provider: 'openai-standard' },
+    { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo', provider: 'openai-standard' },
 
     // Anthropic Models
     { value: 'claude-3-5-sonnet-20241022', label: 'Claude 3.5 Sonnet', provider: 'anthropic' },
@@ -91,21 +96,24 @@ const AVAILABLE_MODELS = [
 ];
 
 export default function CascadeMCP() {
+    const { user } = useAuth();
     const [prompt, setPrompt] = useState('');
     const [loading, setLoading] = useState(false);
     const [generatedCode, setGeneratedCode] = useState<GeneratedComponent | null>(null);
     const [error, setError] = useState('');
     const [activeTab, setActiveTab] = useState(0);
     const [copied, setCopied] = useState(false);
+    const [examplePrompt, setExamplePrompt] = useState('');
 
     // Manual API keys (override environment variables)
     const [manualApiKeys, setManualApiKeys] = useState<Record<string, string>>({
         deepseek: '',
         openai: '',
+        'openai-standard': '',
         anthropic: '',
     });
     const [settingsAnchor, setSettingsAnchor] = useState<null | HTMLElement>(null);
-    const [selectedModel, setSelectedModel] = useState('deepseek-chat');
+    const [selectedModel, setSelectedModel] = useState('gpt-4o');
     const [temperature, setTemperature] = useState(0.7);
     const [maxTokens, setMaxTokens] = useState(2048);
     const [advancedSettingsOpen, setAdvancedSettingsOpen] = useState(false);
@@ -132,6 +140,11 @@ export default function CascadeMCP() {
             baseURL = 'https://api.deepseek.com';
         } else if (provider === 'openai') {
             apiKey = manualApiKeys.openai || import.meta.env.VITE_OPENAI_API_KEY || '';
+            // Dynamic model path based on selection
+            const modelPath = selectedModel === 'gpt-4.5' ? 'gpt-4.5o' : 'gpt-4o';
+            baseURL = `https://dev-api.fefundinfo.com/fefiaimodels/1.0.0/openai/deployments/${modelPath}/chat/completions?api-version=2025-01-01-preview`;
+        } else if (provider === 'openai-standard') {
+            apiKey = manualApiKeys['openai-standard'] || import.meta.env.VITE_OPENAI_STANDARD_API_KEY || '';
             baseURL = 'https://api.openai.com/v1';
         } else if (provider === 'anthropic') {
             apiKey = manualApiKeys.anthropic || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
@@ -147,27 +160,63 @@ export default function CascadeMCP() {
         setError('');
 
         try {
-            const openai = new OpenAI({
-                apiKey: apiKey,
-                baseURL: baseURL,
-                dangerouslyAllowBrowser: true, // Note: In production, use a backend proxy
-            });
+            let completion;
+            
+            if (provider === 'openai') {
+                // Custom FE FundInfo endpoint via server proxy (server provides API key)
+                const response = await fetch('http://localhost:5000/api/proxy/openai', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: selectedModel,
+                        messages: [
+                            { role: 'system', content: SYSTEM_PROMPT },
+                            { role: 'user', content: `Generate a React component for: ${prompt}` },
+                        ],
+                        temperature,
+                        max_tokens: maxTokens,
+                        username: user?.profile?.name || user?.profile?.email || 'anonymous',
+                        // apiKey intentionally omitted – proxy uses server-side key
+                    }),
+                });
 
-            const completion = await openai.chat.completions.create({
-                model: selectedModel,
-                messages: [
-                    {
-                        role: 'system',
-                        content: SYSTEM_PROMPT,
-                    },
-                    {
-                        role: 'user',
-                        content: `Generate a React component for: ${prompt}`,
-                    },
-                ],
-                temperature: temperature,
-                max_tokens: maxTokens,
-            });
+                if (!response.ok) {
+                    let errorData: any = {};
+                    try { errorData = await response.json(); } catch { /* ignore parse errors */ }
+                    const parts = [
+                        errorData.message || `Upstream error ${response.status} ${response.statusText}`,
+                        errorData.activityId ? `activityId: ${errorData.activityId}` : null,
+                    ].filter(Boolean);
+                    throw new Error(parts.join(' | '));
+                }
+
+                completion = await response.json();
+            } else {
+                // Standard OpenAI client for other providers
+                const openai = new OpenAI({
+                    apiKey: apiKey,
+                    baseURL: baseURL,
+                    dangerouslyAllowBrowser: true, // Note: In production, use a backend proxy
+                });
+
+                completion = await openai.chat.completions.create({
+                    model: selectedModel,
+                    messages: [
+                        {
+                            role: 'system',
+                            content: SYSTEM_PROMPT,
+                        },
+                        {
+                            role: 'user',
+                            content: `Generate a React component for: ${prompt}`,
+                        },
+                    ],
+                    temperature: temperature,
+                    max_tokens: maxTokens,
+                });
+            }
 
             // Extract code from response
             let code = completion.choices[0]?.message?.content || '';
@@ -295,10 +344,15 @@ root.render(
                             select
                             size="small"
                             sx={{ width: 240 }}
-                            onChange={(e) => setPrompt(e.target.value)}
+                            value={examplePrompt}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                setExamplePrompt(value);
+                                setPrompt(value);
+                            }}
                             placeholder='Select an example'
                         >
-                            <MenuItem value="" selected disabled>
+                            <MenuItem value="">
                                 Select an example
                             </MenuItem>
                             {EXAMPLE_PROMPTS.map((example) => (
@@ -362,7 +416,7 @@ root.render(
                                 fullWidth
                                 size="small"
                                 type="password"
-                                label={`API Key (${AVAILABLE_MODELS.find(m => m.value === selectedModel)?.provider.toUpperCase()})`}
+                                label={`API Key (${AVAILABLE_MODELS.find(m => m.value === selectedModel)?.provider.toUpperCase().replace('-', ' ')})`}
                                 placeholder="Enter API key or use .env"
                                 value={manualApiKeys[AVAILABLE_MODELS.find(m => m.value === selectedModel)?.provider || 'deepseek'] || ''}
                                 onChange={(e) => {
@@ -372,7 +426,9 @@ root.render(
                                         [provider]: e.target.value
                                     }));
                                 }}
-                                helperText="Optional: Override environment variable"
+                                helperText={AVAILABLE_MODELS.find(m => m.value === selectedModel)?.provider === 'openai'
+                                    ? 'Server-managed key (proxy). Field ignored.'
+                                    : 'Optional: Override environment variable'}
                                 sx={{ mb: 2 }}
                             />
 
@@ -439,6 +495,7 @@ root.render(
                         {/* Input Section */}
                         <Grid item xs={12} md={4}>
                             <Box sx={{ p: 3, borderRight: '1px solid', borderColor: 'divider', height: '100%' }}>
+                                <Chip  label={selectedModel} color="default" size="small" sx={{ mb: 2 }} />
                                 <Box sx={{ position: 'sticky', top: 80, zIndex: 1, backgroundColor: 'background.paper' }}>
                                     <TextField
                                         fullWidth
@@ -529,19 +586,32 @@ root.render(
                                                         border: '1px solid',
                                                         borderColor: 'divider',
                                                         borderRadius: 2,
-                                                        overflow: 'auto',
+                                                        overflow: 'hidden',
                                                     }}
                                                 >
-                                                    <SyntaxHighlighter
-                                                        language="tsx"
-                                                        style={oneLight}
-                                                        customStyle={{
-                                                            margin: 0,
-                                                            fontSize: '0.875rem',
+                                                    <Editor
+                                                        height={`${Math.min(Math.max((generatedCode.code.split('\n').length * 19) + 40, 200), 600)}px`}
+                                                        language="typescript"
+                                                        value={generatedCode.code}
+                                                        theme={ 'vs-dark'}
+                                                        options={{
+                                                            readOnly: true,
+                                                            minimap: { enabled: false },
+                                                            scrollBeyondLastLine: false,
+                                                            wordWrap: 'on',
+                                                            lineNumbers: 'on',
+                                                            folding: true,
+                                                            fontSize: 14,
+                                                            padding: { top: 20, bottom: 20 },
+                                                            scrollbar: {
+                                                                vertical: 'auto',
+                                                                horizontal: 'auto',
+                                                            },
+                                                            overviewRulerLanes: 0,
+                                                            hideCursorInOverviewRuler: true,
+                                                            overviewRulerBorder: false,
                                                         }}
-                                                    >
-                                                        {generatedCode.code}
-                                                    </SyntaxHighlighter>
+                                                    />
                                                 </Box>
                                             </Box>
                                         )}

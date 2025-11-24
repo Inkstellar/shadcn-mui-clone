@@ -1,0 +1,3 @@
+1. Locate selectedModel default - done
+2. Set default to gpt-4 - done
+3. Mention implications/tests - done

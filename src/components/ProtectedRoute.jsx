@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom';
-import { useIsAuthenticated } from '@azure/msal-react';
+import { useAuth } from '../contexts/AuthContext';
 
 /**
  * Protected Route component that requires authentication
@@ -7,7 +7,7 @@ import { useIsAuthenticated } from '@azure/msal-react';
  * Saves the attempted location to redirect back after login
  */
 export default function ProtectedRoute({ children }) {
-    const isAuthenticated = useIsAuthenticated();
+    const { isAuthenticated } = useAuth();
     const location = useLocation();
 
     if (!isAuthenticated) {

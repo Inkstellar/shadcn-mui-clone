@@ -1,5 +1,4 @@
-import { useMsal, useIsAuthenticated } from '@azure/msal-react';
-import { loginRequest } from '../../config/authConfig';
+import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
@@ -16,8 +15,7 @@ import { LogIn, Shield } from 'lucide-react';
 import { privacyPolicy, termsAndConditions } from '../../data/legal';
 
 export default function Login() {
-    const { instance } = useMsal();
-    const isAuthenticated = useIsAuthenticated();
+    const { isAuthenticated, loading, signIn } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [termsOpen, setTermsOpen] = useState(false);
@@ -35,7 +33,7 @@ export default function Login() {
 
     const handleLogin = async () => {
         try {
-            await instance.loginPopup(loginRequest);
+            await signIn();
             // After successful login, redirect to intended page
             navigate(from, { replace: true });
         } catch (error) {
@@ -46,6 +44,26 @@ export default function Login() {
     // Don't render login form if already authenticated
     if (isAuthenticated) {
         return null;
+    }
+    
+    // Show loading state while auth is initializing
+    if (loading) {
+        return (
+            <Container maxWidth="sm" sx={{ py: 0 }}>
+                <Box
+                    sx={{
+                        minHeight: 'calc(100vh - 120px)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Typography variant="body1" color="text.secondary">
+                        Initializing authentication...
+                    </Typography>
+                </Box>
+            </Container>
+        );
     }
 
     return (
