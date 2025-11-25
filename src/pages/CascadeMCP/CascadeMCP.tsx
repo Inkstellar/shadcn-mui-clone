@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { themeOptions, useFullscreen } from 'mui-cascade';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 import {
     Container,
     Box,
@@ -28,7 +28,8 @@ import {
 import { ContentCopy, PlayArrow, Code, Visibility } from '@mui/icons-material';
 import { Editor } from '@monaco-editor/react';
 import OpenAI from 'openai';
-import { Settings, ChevronDown, ChevronRight, Scaling, Codesandbox } from 'lucide-react';
+import { Settings, ChevronDown, ChevronRight, Scaling, Codesandbox, BookOpen } from 'lucide-react';
+import Playbooks from './Playbooks';
 
 interface GeneratedComponent {
     code: string;
@@ -121,6 +122,28 @@ export default function CascadeMCP() {
     // Fullscreen hook
     const { isFullscreen, toggleFullscreen, fullscreenStyles } = useFullscreen('ai-playground');
 
+    // Playbook modal state
+    const [playbookModalOpen, setPlaybookModalOpen] = useState(false);
+    const [playbooks, setPlaybooks] = useState<any[]>([]);
+    const [selectedPlaybookId, setSelectedPlaybookId] = useState<string>('');
+
+    // Fetch playbooks on component mount
+    useEffect(() => {
+        fetchPlaybooks();
+    }, []);
+
+    const fetchPlaybooks = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/playbooks');
+            if (response.ok) {
+                const data = await response.json();
+                setPlaybooks(data);
+            }
+        } catch (err) {
+            console.error('Failed to fetch playbooks:', err);
+        }
+    };
+
     const generateComponent = async () => {
         if (!prompt.trim()) {
             setError('Please enter a prompt');
@@ -160,6 +183,17 @@ export default function CascadeMCP() {
         setError('');
 
         try {
+            // Get selected playbook details if one is selected
+            const selectedPlaybook = selectedPlaybookId 
+                ? playbooks.find(p => p.id === parseInt(selectedPlaybookId))
+                : null;
+
+            // Build the user prompt with playbook context if available
+            let userPrompt = `Generate a React component for: ${prompt}`;
+            if (selectedPlaybook) {
+                userPrompt += `\n\nPlaybook Context:\nTitle: ${selectedPlaybook.title}\nDescription: ${selectedPlaybook.description}`;
+            }
+
             let completion;
             
             if (provider === 'openai') {
@@ -173,11 +207,12 @@ export default function CascadeMCP() {
                         model: selectedModel,
                         messages: [
                             { role: 'system', content: SYSTEM_PROMPT },
-                            { role: 'user', content: `Generate a React component for: ${prompt}` },
+                            { role: 'user', content: userPrompt },
                         ],
                         temperature,
                         max_tokens: maxTokens,
                         username: user?.profile?.name || user?.profile?.email || 'anonymous',
+                        playbook_id: selectedPlaybookId ? parseInt(selectedPlaybookId) : null,
                         // apiKey intentionally omitted – proxy uses server-side key
                     }),
                 });
@@ -210,7 +245,7 @@ export default function CascadeMCP() {
                         },
                         {
                             role: 'user',
-                            content: `Generate a React component for: ${prompt}`,
+                            content: userPrompt,
                         },
                     ],
                     temperature: temperature,
@@ -371,12 +406,11 @@ root.render(
                             </>
                         ) : null}
                         <IconButton
-                            key={"scaling"}
+                            key={"playbook"}
                             size="small"
-                            onClick={toggleFullscreen}
-                            title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                            onClick={() => setPlaybookModalOpen(true)}
                         >
-                            <Scaling size={20} />
+                            <BookOpen />
                         </IconButton>
                         <IconButton
                             key={"settings"}
@@ -385,6 +419,15 @@ root.render(
                         >
                             <Settings />
                         </IconButton>
+                        <IconButton
+                            key={"scaling"}
+                            size="small"
+                            onClick={toggleFullscreen}
+                            title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                        >
+                            <Scaling size={20} />
+                        </IconButton>
+                        
                         <Menu
                             anchorEl={settingsAnchor}
                             open={Boolean(settingsAnchor)}
@@ -507,6 +550,24 @@ root.render(
                                         onChange={(e) => setPrompt(e.target.value)}
                                         sx={{ mb: 2 }}
                                     />
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        size="small"
+                                        label="Select Playbook (Optional)"
+                                        value={selectedPlaybookId}
+                                        onChange={(e) => setSelectedPlaybookId(e.target.value)}
+                                        sx={{ mb: 2 }}
+                                    >
+                                        <MenuItem value="">
+                                            <em>None - Generate from scratch</em>
+                                        </MenuItem>
+                                        {playbooks.map((playbook) => (
+                                            <MenuItem key={playbook.id} value={playbook.id}>
+                                                {playbook.title}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
 
                                     <Button
                                         variant="contained"
@@ -651,6 +712,13 @@ root.render(
                         </Grid>
                     </Grid>
                 </Paper>
+
+                {/* Playbook Management Modal */}
+                <Playbooks 
+                    open={playbookModalOpen} 
+                    onClose={() => setPlaybookModalOpen(false)}
+                    onPlaybooksUpdate={(updatedPlaybooks) => setPlaybooks(updatedPlaybooks)}
+                />
             </Box>
         </Container >
     );

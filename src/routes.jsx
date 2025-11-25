@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import DesignAssets from './pages/DesignAssets';
 import Components from './pages/Components';
-import CascadeMCP from './pages/CascadeMCP';
+import CascadeMCP from './pages/CascadeMCP/CascadeMCP';
 import MCPLogs from './pages/MCPLogs';
 import Login from './pages/servicePages/Login';
 import AuthCallback from './pages/servicePages/AuthCallback';
