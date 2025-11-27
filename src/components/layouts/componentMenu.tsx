@@ -80,7 +80,7 @@ export default function componentMenu(
                 sx={{
                     my: 0.5,
                     borderRadius: 1,
-                    color: isActive ? theme.palette.primary.main : theme.palette.text.secondary,
+                    color: isActive ? theme.palette.primary.light : theme.palette.text.secondary,
                     backgroundColor: isActive ? theme.palette.action.selected : 'transparent',
                     '&:hover': {
                         backgroundColor: theme.palette.action.hover,
@@ -101,7 +101,7 @@ export default function componentMenu(
                 const isActive = location.pathname === item.href;
                 return (
                     <MenuListItem key={item.name} name={item.name} href={item.href} isActive={isActive}>
-                        <ListItemText secondary={item.name} />
+                        <ListItemText secondary={item.name} secondaryTypographyProps={{ fontWeight: 600 }} />
                     </MenuListItem>
                 );
             })}
@@ -125,7 +125,7 @@ export default function componentMenu(
                         }}
                         onClick={() => toggleSection(section.key)}
                     >
-                        <ListItemText secondary={section.title} />
+                        <ListItemText secondary={section.title} secondaryTypographyProps={{fontWeight: 600}} />
                         {expandedSections[section.key] ? (
                             <ChevronDown size={16} />
                         ) : (

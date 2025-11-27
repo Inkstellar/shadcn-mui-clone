@@ -2,8 +2,9 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import DesignAssets from './pages/DesignAssets';
 import Components from './pages/Components';
+import Help from './pages/Help/Help';
 import CascadeMCP from './pages/CascadeMCP/CascadeMCP';
-import MCPLogs from './pages/MCPLogs';
+import MCPLogs from './pages/MCPLogs/MCPLogs';
 import Login from './pages/servicePages/Login';
 import AuthCallback from './pages/servicePages/AuthCallback';
 import LogoutCallback from './pages/servicePages/LogoutCallback';
@@ -15,6 +16,7 @@ export default function AppRoutes() {
         <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/components" element={<Components />} />
+            <Route path="/help" element={<Help />} />
             <Route
                 path="/mcp/cascade"
                 element={

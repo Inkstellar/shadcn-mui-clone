@@ -10,9 +10,11 @@ import {
     Stack,
     TextField,
     MenuItem,
+    IconButton,
 } from '@mui/material';
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
-import { CheckCircle, XCircle, Clock } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, Eye } from 'lucide-react';
+import { RequestDetailsModal } from './RequestDetailsModal';
 
 interface MCPRequest {
     id: number;
@@ -42,6 +44,8 @@ export default function MCPLogs() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [statusFilter, setStatusFilter] = useState<string>('all');
+    const [codeModalOpen, setCodeModalOpen] = useState(false);
+    const [selectedRequest, setSelectedRequest] = useState<MCPRequest | null>(null);
 
     useEffect(() => {
         fetchData();
@@ -69,6 +73,16 @@ export default function MCPLogs() {
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleViewCode = (request: MCPRequest) => {
+        setSelectedRequest(request);
+        setCodeModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setCodeModalOpen(false);
+        setSelectedRequest(null);
     };
 
     const columns: GridColDef[] = [
@@ -135,7 +149,7 @@ export default function MCPLogs() {
             headerName: 'Duration (ms)',
             width: 130,
             type: 'number',
-            valueFormatter: (params: any) => {
+            renderCell: (params: any) => {
                 return params.value ? `${params.value.toLocaleString()} ms` : 'N/A';
             },
         },
@@ -143,7 +157,7 @@ export default function MCPLogs() {
             field: 'request_time',
             headerName: 'Request Time',
             width: 180,
-            valueFormatter: (params: any) => {
+            renderCell: (params: any) => {
                 return new Date(params.value).toLocaleString();
             },
         },
@@ -151,9 +165,26 @@ export default function MCPLogs() {
             field: 'response_time',
             headerName: 'Response Time',
             width: 180,
-            valueFormatter: (params: any) => {
+            renderCell: (params: any) => {
                 return params.value ? new Date(params.value).toLocaleString() : 'N/A';
             },
+        },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            width: 100,
+            sortable: false,
+            filterable: false,
+            renderCell: (params: any) => (
+                <IconButton
+                    size="small"
+                    onClick={() => handleViewCode(params.row)}
+                    color="primary"
+                    title="View Code"
+                >
+                    <Eye size={18} />
+                </IconButton>
+            ),
         },
     ];
 
@@ -275,6 +306,12 @@ export default function MCPLogs() {
                     }}
                 />
             </Paper>
+
+            <RequestDetailsModal
+                open={codeModalOpen}
+                request={selectedRequest}
+                onClose={handleCloseModal}
+            />
         </Container>
     );
 }
